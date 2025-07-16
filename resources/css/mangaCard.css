@@ -1,0 +1,26 @@
+.mangaContainer {
+    padding-bottom:1.25rem;
+    margin-bottom:2.25rem;
+}
+
+.mangaCard {
+    overflow-x:auto;
+    position:relative;
+}
+
+.mangaCard::-webkit-scrollbar {
+    height: 0.50rem;
+}
+
+.mangaCard::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+    max-width:200px;
+}
+.mangaCard::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 10px;
+}
+.mangaContainer:hover .mangaCard::-webkit-scrollbar-thumb {
+    background-color:rgba(124, 124, 124, 1);
+}
