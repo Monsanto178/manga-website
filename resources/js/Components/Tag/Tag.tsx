@@ -8,8 +8,8 @@ interface Props {
 export const Tag = (props : Props) => {
     return (
         <>
-        <li className='text-[12px] bg-[#FF6740] rounded-md p-1 sm:p-2 md:text-[16px]'>
-            <a href={props.url ? props.url : '/'}>{props.name}</a>
+        <li className='text-[12px]  md:text-[16px]'>
+            <a className="w-full bg-[#FF6740] rounded-md sm:p-2 p-1" href={props.url ? props.url : '/'}>{props.name}</a>
         </li>
         </>
     );

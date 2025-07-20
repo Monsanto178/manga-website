@@ -22,7 +22,7 @@ Route::get('/mangas/populars/{page}', [MangaController::class, 'getPopularMangas
 Route::get('/mangas/recents/{page}', [MangaController::class, 'getRecentMangas']);
 Route::get('/mangas/recommendations/{page}', [MangaController::class, 'getRecommendations']);
 Route::get('/mangas/manga/{mangaId}', [MangaController::class, 'getManga']);
-Route::get('/mangas/manga/related/{type}/{mal_id}', [MangaController::class, 'getRelated']);
+Route::post('/mangas/manga/related', [MangaController::class, 'getRelated']);
 Route::get('/mangas/manga/{mangaId}/characters', [MangaController::class, 'getCharacters']);
 Route::post('/mangas/manga/getAuthors', [MangaController::class, 'getAuthor']);
 

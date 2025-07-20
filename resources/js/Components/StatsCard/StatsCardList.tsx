@@ -40,7 +40,7 @@ export const StatsCardList = (props:Props) => {
             )
         case 'tag':
             return (
-                <div className='flex flex-col w-70' >
+                <div className='flex flex-col w-70 gap-y-4' >
                     <strong>{props.title}</strong>
                     {props.values.length !== 0 ? <TagList listaTags={props.values}></TagList> : 'No register'}
                 </div>

@@ -31,13 +31,13 @@ export const AuthorCard = ({entries, manga_id}:AuthorProps) => {
 
     const fetchData = async() => {
         try {
-            const csrfTokeni = await getCsrfToken();
+            const csrfToken = await getCsrfToken();
 
             const res = await fetch('/mangas/manga/getAuthors' , {
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
-                    'X-CSRF-TOKEN': csrfTokeni,
+                    'X-CSRF-TOKEN': csrfToken,
                 },
                 body: JSON.stringify({
                     authors_ids: ids,

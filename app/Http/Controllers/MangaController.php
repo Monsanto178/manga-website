@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Client\Pool;
+use Illuminate\Http\Client\Response as ClientResponse;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -87,37 +89,33 @@ class MangaController extends Controller
         return inertia('MangaPage', ['manga' => $manga['data']]);
     }
 
-    public function getRelated($type, $mal_id) {
-        $acceptedTypes = ['manga', 'anime'];
+    public function getRelated(Request $request) {
+        $data = $request->input('data');
+        $results = [];
 
-        if(!in_array($type, $acceptedTypes, true)) {
-            return response()->json([
-                'error' => 'Invalid input.'
-            ], 400);
-        };
-        $endpoint = match ($type) {
-            'manga' => "https://api.jikan.moe/v4/manga/$mal_id",
-            'anime' => "https://api.jikan.moe/v4/anime/$mal_id",
-            'default' => null
-        };
+        $endpoints = array_map(function ($media){
+            return match ($media['type']) {
+                'manga' => "https://api.jikan.moe/v4/manga/$media[mal_id]",
+                'anime' => "https://api.jikan.moe/v4/anime/$media[mal_id]",
+                'default' => null
+            };
+        }, $data);
 
-        try {
-            $response = Http::retry(3, 1000)->get($endpoint);
+        $responses = Http::pool(fn ($pool) =>
+            array_map(fn ($url) => $pool->retry(3, 1000)->get($url), $endpoints)
+        );
+        foreach ($data as $idx => $media) {
+            $response = $responses[$idx];
 
-            if ($response->successful()) {
-                return response()->json($response->json());
+            if ($response instanceof ClientResponse && $response->successful()) {
+                $results[] = [
+                    'entry' => $response->json('data'),
+                    'relation' => $media['relation']
+                ];
             }
-
-            return response()->json([
-                'error' => 'Failed to fetch Data',
-                'status' => $response->status()
-            ], $response->status());
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Connection Error.',
-                'message' => $e->getMessage()
-            ], 500);
         }
+
+        return response()->json($results, 200);
     }
 
 
@@ -125,48 +123,40 @@ class MangaController extends Controller
         $authors_id = $request->input('authors_ids');
         $manga_id = $request->input('manga_id');
 
-        Log::info(['array' => $authors_id]);
-
-
         if (!is_array($authors_id)) {
             return response()->json(['error' => 'Invalid input.'], 400);
         }
 
         $results = [];
 
-        foreach ($authors_id as $author_id) {
-            // Log::info(['author_id: ' => $author_id]);
-            $author_res = Http::retry(3, 1000)->get("https://api.jikan.moe/v4/people/$author_id");
+        $authors_res = Http::pool(fn (Pool $pool) =>  
+            array_map(fn ($id) => $pool->retry(3, 1000)->get("https://api.jikan.moe/v4/people/$id"), $authors_id)
+        );
 
-            if (!$author_res->successful()) {
-                continue;
-            }
+        $mangas_res = Http::pool(fn (Pool $pool) =>  
+            array_map(fn ($id) => $pool->retry(3, 1000)->get("https://api.jikan.moe/v4/people/$id/manga"), $authors_id)
+        );
 
-            $author_data = $author_res->json('data');
-            // Log::info(['Author devuelto: ' => $author_data]);
+        foreach ($authors_id as $idx => $response) {
+            if ($mangas_res[$idx]->successful() && $authors_res[$idx]->successful()) {
+                $mangas = $mangas_res[$idx]->json('data');
+                $author = $authors_res[$idx]->json('data');
 
-            $author_mangas = Http::timeout(60)->retry(3, 1000)->get("https://api.jikan.moe/v4/people/$author_id/manga");
-
-            $position = null;
-
-            if ($author_mangas->successful()) {
-                $mangaList = $author_mangas->json('data');
-                foreach ($mangaList as $entry) {
-                    if ($entry['manga']['mal_id'] === $manga_id) {
-                        $position = $entry['position'];
-                        break;
+                $position = null;
+                foreach ($mangas as $manga) {
+                    if ($manga['manga']['mal_id'] === $manga_id) {
+                        $position = $manga['position'];
                     }
                 }
-            }
 
-            $results[] = [
-                'mal_id' => $author_id,
-                'name' => $author_data['name'] ?? null,
-                'image_url' => $author_data['images']['jpg']['image_url'],
-                'position' => $position
-            ];
-        }
-        Log::info(['ARRAY DEFINITIVO: ' => $results]);
+                $results[] = [
+                    'mal_id' => $author['mal_id'],
+                    'name' => $author['name'] ?? null,
+                    'image_url' => $author['images']['jpg']['image_url'],
+                    'position' => $position
+                ];
+            }
+        };
         return response()->json($results, 200);
     }
 
@@ -178,6 +168,6 @@ class MangaController extends Controller
             return response()->json('The solicitude has failed.', 400);
         }
 
-        return response()->json($response, 200);
+        return response()->json($response->json(), 200);
     }
 }
