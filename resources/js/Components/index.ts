@@ -6,7 +6,6 @@ export * from "./GenreCard/GenreCardList"
 export * from "./Banner/Banner"
 export * from "./Banner/MangaBanner"
 export * from "./Banner/BannerList"
-export * from "./MangaSideCard/MangaSideCard"
 export * from "./ChapterTag/ChapterTag"
 export * from "./ChapterTag/ChapterTagList"
 export * from "./StatsCard/StatsCardList"
@@ -15,4 +14,17 @@ export * from "./RelatedCard/RelatedCardList"
 export * from "./RelatedCard/LoadingCard"
 export * from "./AuthorCard/AuthorCard"
 export * from "./CharacterCard/CharactersList"
+export * from "./FullMangaCard/FullCardList"
+export * from "./FullMangaCard/PaginationCard"
+export * from "./FullMangaCard/CategoryLoading"
+export * from "./FullMangaCard/OrderCard"
+export * from "./Banner/LoadingBanner";
+export * from "./Review/ReviewCardList";
+export * from "./Search/SearchResult";
+export * from "./Header/Header";
+export * from "./Search/SearchBar";
+export * from "./AuthorCard/AuthorWorkCard";
+export * from "./AuthorCard/AuthorFullCard";
+export * from "./AuthorCard/LoadingFullCard ";
+export * from "./Review/LoadingReviews";
 // export * from "./MangaCard/MangaCard"

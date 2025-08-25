@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TagList } from "../Tag/TagList";
 
 interface Tag {
-    key:number;
+    mal_id:number;
     name: string;
 }
 

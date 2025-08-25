@@ -16,20 +16,12 @@ interface Card {
 interface Manga {
     mal_id:number;
     images:{
-        jpg:{
-            image_url:string, 
-            small_image_url:string,
-            large_image_url?:string
-        },
-        webp:{
-            image_url:string, 
-            small_image_url:string,
-            large_image_url?:string
-        }
+        jpg:{image_url:string, small_image_url:string, large_image_url?:string},
+        webp:{image_url:string, small_image_url:string, large_image_url?:string}
     };
     status:string;
-    publishing?:boolean;
-    published?: {
+    publishing:boolean;
+    published: {
         prop:{
             from:{
                 day:number,
@@ -42,24 +34,24 @@ interface Manga {
                 year:number
             }
         }
+        string: string;
     };
     title:string;
     synopsis:string;
     background?:string;
-    titles:{
-        type:string, 
-        title:string
-    };
-    type?:string;
-    authors?:[
-        {
+    titles:Array<{type:string, title:string}>;
+    type:string;
+    authors:
+        Array<{
             mal_id:number,
             type:string,
             name:string
-        }
-    ]
-    volumes?:number;
-    chapters?:number;
+        }>
+    score: number | null;
+    favorites: number | null;
+    rank: number | null;
+    volumes:number | null;
+    chapters:number | null;
     genres:[
         {
             mal_id:number,
@@ -74,39 +66,23 @@ interface Manga {
             name:string
         }
     ];
-    demographics:[
-        {
+    demographics:
+        Array<{
             mal_id:number,
             type:string,
             name:string
-        }
-    ];
-    serialization:[
-        {
+        }>;
+    serializations:
+        Array<{
             mal_id:number,
             type:string,
             name:string
-        }
-    ];
-    relations:[
-        {
-            relation:string,
-            entry:[
-                {
-                    mal_id:number,
-                    type:string,
-                    name:string,
-                    url:string
-                }
-            ]
-        }
-    ]
-    external?:[
-        {
-            name:string,
-            url:string
-        }
-    ]
+        }>;
+    relations:
+        Array<{
+            relation:string,entry:Array<{mal_id:number,type:string,name:string,url:string}>
+        }>
+    external:Array<{name:string,url:string}>
 }
 
 interface MangaContainer {

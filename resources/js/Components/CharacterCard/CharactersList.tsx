@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { CharacterCard } from "./CharacterCard";
 import { PaginationCard } from "./PaginationCard";
 type Character = {
@@ -20,12 +20,11 @@ type Character = {
 }
 
 type CardProps = {
-    mal_id:number;
     limitPerPage:number;
+    charList: Character[];
 }
 
-export const CharacterList = ({mal_id, limitPerPage} : CardProps) => {
-    const [characters, setCharacters] = useState<Character[]>([]);
+export const CharacterList = ({charList, limitPerPage} : CardProps) => {
     const [charPerPage, setCharPerPage] = useState<Character[]>([]);
     
     const [start, setStart] = useState(0);
@@ -33,7 +32,18 @@ export const CharacterList = ({mal_id, limitPerPage} : CardProps) => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalChar, setTotalChar] = useState(0);
     const [currentPage, setCurrentPage] = useState(1)
-    const [isLoading, setLoading] = useState(true);
+    const charactersRef = useRef<HTMLElement>(null);
+
+    const scrollTo = () => {
+        if (charactersRef.current) {
+            const y = charactersRef.current.getBoundingClientRect().top + window.pageYOffset;
+
+            window.scrollTo({
+                top: y - 150,
+                behavior: 'smooth',
+            });
+        }
+    }
 
     const nextPage = () => {
         if(currentPage+1 > totalPages) return;
@@ -94,38 +104,20 @@ export const CharacterList = ({mal_id, limitPerPage} : CardProps) => {
         setCharPerPage(limitedChars);
     }
 
-    const fetchData = async () => {
-        const res = await fetch(`/mangas/manga/${mal_id}/characters`);
-        if (!res.ok) {
-            console.error('An error has occurred.')
-        }
-        const response = await res.json();
-        setCharacters(response.data);
-        console.log(response.data);
-        
-        sliceCharacters(response.data);
-
-        const aproxPages = (response.data.length) / limitPerPage;
-        setTotalPages(Math.ceil(aproxPages))
-        setTotalChar(response.data.length)
-
-        setLoading(false);
-    }
 
     useEffect(() => {
-        sliceCharacters(characters);
-    }, [start, end, characters]);
-    useEffect(()=> {
-        fetchData();
-    }, []);
+        sliceCharacters(charList);
+        scrollTo();
+    }, [start, end]);
+    useEffect(() => {
+        const aproxPages = (charList.length) / limitPerPage;
+        setTotalPages(Math.ceil(aproxPages))
+        setTotalChar(charList.length)
+        setTimeout(() => {
+            scrollTo();
+        }, 100);
+    }, [charList, limitPerPage])
     return (
-        <>
-        {isLoading && 
-            <div className="text-white">
-                <h1>CARGANDO</h1>
-            </div>
-        }
-        {!isLoading &&
         <>
         <style>
         {`
@@ -136,7 +128,7 @@ export const CharacterList = ({mal_id, limitPerPage} : CardProps) => {
           }
         `}
       </style>
-        <article className="gridCard grid justify-center items-center" style={{gridTemplateColumns:'repeat(auto-fill, 300px)', rowGap:'3rem', columnGap:'1.5rem'}}>
+        <article ref={charactersRef} className="gridCard grid justify-center items-center" style={{gridTemplateColumns:'repeat(auto-fill, 300px)', rowGap:'3rem', columnGap:'1.5rem'}}>
             {
             charPerPage.map((char) => {
                 return (
@@ -150,8 +142,6 @@ export const CharacterList = ({mal_id, limitPerPage} : CardProps) => {
                 <PaginationCard totalPages={totalPages} currentPage={currentPage} actions={actions}/>
             }
         </article>
-        </>
-        }
         </>
     )
 }

@@ -2,13 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { RelatedCard } from "./RelatedCard";
 import { LoadingCard } from "./LoadingCard";
 
-type Manga = {
+type PlainManga = {
     mal_id:number;
     type:string;
-    name:string;
+    relation:string;
 }
 
-type Relate = Manga & {
+interface FullManga {
+    mal_id:number;
+    name:string;
+    title?:string;
     type:string;
     status:string;
     images:{
@@ -25,99 +28,52 @@ type Relate = Manga & {
     }
 }
 
-type Relation = {
-    relation:string;
-    entry:Array<Manga>;
+type FullRel = {
+    mangas: Array<{entry:FullManga; relation:string;}>
+    setLoading: false;
+}
+type PlainRel = {
+    plainMangas: Array<PlainManga>
+    setLoading: true;
 }
 
-type Relations = {
-    relations: Relation[];
+interface Props<T> {
+    prop:T;
 }
 
-type DataList = {
-    entry: Relate;
-    relation:string;
-}
 
-export const RelatedCardList = ({relations}:Relations) => {
-    const [isLoading, setLoading] = useState(true);
-    const [related, setRelated] = useState<DataList[]>([]);
-    const cacheRelated = useRef<DataList[]>([]);
-    const dataToSend = transformRelations({relations});
-    type ObjSend = {
-        mal_id:number;
-        type:string;
-        relation:string;
-    }
+export const RelatedCardList = ({prop}:Props<PlainRel | FullRel>) => {
+    const relatedRef = useRef<HTMLElement>(null);
 
-    function transformRelations (obj:Relations):ObjSend[] {
-        return obj.relations.flatMap(rel => 
-            rel.entry.map(e => ({
-                mal_id: e.mal_id,
-                type:e.type,
-                relation: rel.relation,
-            }))
-        )
-    }
-    const getCsrfToken = async () => {
-        const response = await fetch('/csrf-token');
-        const data = await response.json();
-        return data.csrf_token;
-    };
-    
-    const fetchData = async () => {
-        const csrfToken = await getCsrfToken();
-        try {
-            const response = await fetch(`/mangas/manga/related`, {
-                method:'POST',
-                headers: {
-                    'Content-Type':'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({data: dataToSend})
+    const scrollTo = () => {
+        if (relatedRef.current) {
+            const y = relatedRef.current.getBoundingClientRect().top + window.pageYOffset;
+
+            window.scrollTo({
+                top: y - 150,
+                behavior: 'smooth',
             });
-
-            if (!response.ok) throw new Error("An error has occurred");
-
-            const res = await response.json();
-            console.log(res);
-            cacheRelated.current = res;
-            setRelated(res);
-        } catch (error) {
-            console.error('The error is: ' + error)
-        } finally {
-            setLoading(false)
         }
-
     }
+
     useEffect(() => {
-        console.log('CACHE RELATED');
-        
-        console.log(cacheRelated.current);
-        
-        if(cacheRelated.current.length>0) {
-            setRelated(cacheRelated.current);
-            setLoading(false)
-            // console.log('ES MAS LARGO. ES MAS LARGO');
-            
-        } else {
-            fetchData();
-        };
-    }, []);
-    relations.map((el) => {el.relation})
+        setTimeout(() => {
+            scrollTo()
+        }, 100);
+    }, [])
     return (
         <>
-        <article className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 300px)', rowGap:'3rem', columnGap:'1.5rem'}}>
-            {isLoading &&
-                dataToSend.map(el => {
+        <article ref={relatedRef} className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 300px)', rowGap:'3rem', columnGap:'1.5rem'}}>
+            {prop.setLoading &&
+                prop.plainMangas.map(el => {
                     return (
                         <LoadingCard key={el.mal_id}/>
                     )
                 })
             }
             
-            {!isLoading && 
-            related.map((el, index) => {
+            {!prop.setLoading && 
+            prop.mangas.map((el, index) => {
                 return (
                     <RelatedCard key={index} entry={el.entry} relation={el.relation}/>  
                 )

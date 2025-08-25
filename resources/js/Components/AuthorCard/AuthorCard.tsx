@@ -1,83 +1,56 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LoadingCard } from "./LoadingCard";
 
 type Author = {
     mal_id: number;
     name:string;
+    image_url?:string;
+    position?:string;
 }
 
 type AuthorProps = {
     entries: Author[];
-    manga_id:number;
+    setLoading: boolean;
 }
 
-type AuthorFull = Author & {
-    image_url:string;
-    position:string;
-}
+export const AuthorCard = ({entries, setLoading= false}:AuthorProps) => {
+    const authorsRef = useRef<HTMLElement>(null);
 
-export const AuthorCard = ({entries, manga_id}:AuthorProps) => {
-    const [authors, setAuthors] = useState<AuthorFull[]>([]);
-    const [isLoading, setLoading] = useState(true);
+    const scrollTo = () => {
+        if (authorsRef.current) {
+            const y = authorsRef.current.getBoundingClientRect().top + window.pageYOffset;
 
-    const ids = entries.map((person) => person.mal_id);
-
-    const getCsrfToken = async () => {
-        const response = await fetch('/csrf-token');
-        const data = await response.json();
-        return data.csrf_token;
-    };
-    
-
-    const fetchData = async() => {
-        try {
-            const csrfToken = await getCsrfToken();
-
-            const res = await fetch('/mangas/manga/getAuthors' , {
-                method:'POST',
-                headers: {
-                    'Content-Type':'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({
-                    authors_ids: ids,
-                    manga_id: manga_id
-                })
-            })
-
-            if (!res.ok) {
-                console.log('error al intentar enviar');
-            }
-            const response = await res.json();
-            setAuthors(response);
-            setLoading(false);
-            console.log(response)
-            
-        } catch (error) {
-            console.error('error horrible: ' + error)
+            window.scrollTo({
+                top: y - 150,
+                behavior: 'smooth',
+            });
         }
     }
 
     useEffect(() => {
-        fetchData()
+        setTimeout(() => {
+            scrollTo();
+        }, 100);
     }, []);
     return (
         <>
-        {isLoading && 
-        <article className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'1.5rem'}}>
+        {setLoading && 
+        <article ref={authorsRef} className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'1.5rem'}}>
             {
-            ids.map((el) => {
+            entries.map((_, idx) => {
                 return(
-                    <LoadingCard key={el}/>
+                    <LoadingCard key={idx}/>
                 )
             })
             }
         </article>
         }
-        {!isLoading &&
-        <article className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'3rem'}}>
+        {!setLoading &&
+        <article ref={authorsRef} className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'3rem'}}>
         {
-        authors.map((author) => {
+        entries.map((author) => {
+            console.log(author);
+            
             let rol = '';
             switch (author.position) {
                 case 'Story & Art':
@@ -94,9 +67,23 @@ export const AuthorCard = ({entries, manga_id}:AuthorProps) => {
             }
             return (
                 <>
-                <a href='/' className="relateCard flex text-white w-[31%] min-w-[400px] max-w-[500px] h-[160px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
+                <style>
+                {`
+                @media (max-width: 887px) {
+                    .relateCard {
+                    min-width: 350px !important;
+                    }
+                }
+                @media (max-width: 500px) {
+                    .relateCard {
+                    min-width: 300px !important;
+                    }
+                }
+                `}
+                </style>
+                <a href={`/author/${author.mal_id}`} className="relateCard flex text-white w-[31%] min-w-[400px] max-w-[500px] h-[160px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
                     <picture className="w-[30%] min-w-[105px] sm:min-w-[119px] max-h-[160px]">
-                        <img className="w-full h-full object-cover object-center" src={author?.image_url} alt="img" />
+                        <img className="w-full h-full object-cover object-center" src={author.image_url} alt="img" />
                     </picture>
                     <div className="flex flex-col justify-between p-4 w-[69%]">
                         <div className="flex flex-col">
@@ -115,7 +102,7 @@ export const AuthorCard = ({entries, manga_id}:AuthorProps) => {
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <span>{author?.position}</span>
+                            <span>{author.position}</span>
                         </div>
                     </div>
                 </a>

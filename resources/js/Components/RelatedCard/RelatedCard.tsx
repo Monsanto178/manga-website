@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { LoadingCard } from "./LoadingCard";
-
 type Media = {
     mal_id:number;
     type:string;
@@ -32,27 +29,6 @@ type Relation = {
 
 
 export const RelatedCard = ({entry, relation}:Relation) => {
-    // const [relate, setRelate] = useState<Relate | null>(null);
-    // const [isLoading, setLoading] = useState(true);    
-
-    // // const fetchData = async() => {
-    // //     try {
-    // //         const res = await fetch(`related/${media.type}/${media.mal_id}`);
-    // //         if (!res.ok) throw new Error("Error trayendo manga/anime relacionado.");
-    // //         const data = await res.json();
-    // //         console.log(media.name);
-    // //         console.log(data.data);
-    // //         setRelate(data.data);
-    // //     } catch (error) {
-    // //         console.error(error)
-    // //     } finally {
-    // //         setLoading(false);
-    // //     }
-    // // }
-
-    // // useEffect(() => {
-    // //     fetchData();
-    // // }, []);
     const relacion = relation;
     const uri = entry.type === 'manga' ? `/mangas/manga/${entry.mal_id}` : `/`;
     return (
@@ -71,9 +47,6 @@ export const RelatedCard = ({entry, relation}:Relation) => {
         }
         `}
         </style>
-
-            {/* {isLoading && <LoadingCard/ >}
-            {!isLoading &&  */}
             <a href={uri} className="relateCard flex text-white w-[31%] min-w-[300px] max-w-[500px] max-h-[160px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
                 <picture className="w-[30%] min-w-[105px] sm:min-w-[119px] max-h-[160px]">
                     <img className="w-full h-full object-cover object-center" src={entry.images.webp.image_url} alt="img" />
@@ -100,8 +73,6 @@ export const RelatedCard = ({entry, relation}:Relation) => {
                     </div>
                 </div>
             </a>
-            {/* } */}
-
         </>
     )
 }

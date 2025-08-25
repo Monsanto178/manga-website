@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Banner } from "./Banner";
 
 interface Tag {
-    key:number;
+    mal_id:number;
     name: string;
 }
 
