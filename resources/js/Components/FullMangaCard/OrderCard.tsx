@@ -13,11 +13,11 @@ type Props = {
             changeOrder: (val:Type|Status|OrderBy) => void;
             applyFilter: () => void;
         };
+        hasError?: boolean;
     }
 }
 
 export const OrderCard = ({props}:Props) => {
-    // Poner mayúsculas al principio en el array o en el botón con una función.
     const typeEnum: Type[] = ["manga", "novel", "lightnovel", "oneshot", "doujin", "manhwa", "manhua"];
     const statusEnum: Status[] = ['publishing', 'complete', 'discontinued', 'hiatus', 'upcoming'];
     const orderEnum: OrderBy[] = ['score', 'start_date', 'popularity', 'title'];
@@ -27,7 +27,7 @@ export const OrderCard = ({props}:Props) => {
             <div>
                 <strong>Types</strong>
             </div>
-            <div className="flex flex-row flex-wrap gap-2">
+            <div className="flex flex-row justify-between justify-between sm:justify-start flex-wrap gap-2">
                 {typeEnum.map((el:Type, idx) => {
                     return (<OrderBtn key={idx} name={el} type={props.actualType} action={props.actions.changeOrder}/>)
                 })}
@@ -37,7 +37,7 @@ export const OrderCard = ({props}:Props) => {
             <div>
                 <strong>Order By</strong>
             </div>
-            <div className="flex flex-row flex-wrap gap-2">
+            <div className="flex flex-row justify-between justify-between sm:justify-start flex-wrap gap-2">
             {orderEnum.map((el, idx) => {
                 return (<OrderBtn key={idx} name={el} type={props.actualOrder} action={props.actions.changeOrder}/>)
             })}
@@ -47,14 +47,14 @@ export const OrderCard = ({props}:Props) => {
             <div>
                 <strong>Status</strong>
             </div>
-            <div className="flex flex-row flex-wrap gap-2">
+            <div className="flex flex-row justify-between justify-between sm:justify-start flex-wrap gap-2">
             {statusEnum.map((el, idx) => {
                 return (<OrderBtn key={idx} name={el} type={props.actualStatus} action={props.actions.changeOrder}/>)
             })}
             </div>
         </article>
         <article className="flex justify-end my-4">
-            <button onClick={() => props.actions.applyFilter()} className="bg-[#FF6740] w-[7rem] rounded-[10px] h-10 cursor-pointer ">
+            <button onClick={() => props.hasError ? {} : props.actions.applyFilter()} className={`${props.hasError ? 'bg-[#363636]' : 'bg-[#FF6740] cursor-pointer'} w-[7rem] rounded-[10px] h-10 `} disabled={true}>
                 <strong>Apply Filters</strong>
             </button>
         </article>

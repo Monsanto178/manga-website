@@ -35,7 +35,7 @@ export const AuthorCard = ({entries, setLoading= false}:AuthorProps) => {
     return (
         <>
         {setLoading && 
-        <article ref={authorsRef} className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'1.5rem'}}>
+        <article ref={authorsRef} className="grid" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'1.5rem'}}>
             {
             entries.map((_, idx) => {
                 return(
@@ -46,7 +46,7 @@ export const AuthorCard = ({entries, setLoading= false}:AuthorProps) => {
         </article>
         }
         {!setLoading &&
-        <article ref={authorsRef} className="grid justify-center" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'3rem'}}>
+        <article ref={authorsRef} className="grid" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'3rem'}}>
         {
         entries.map((author) => {
             console.log(author);

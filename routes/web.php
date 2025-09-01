@@ -8,10 +8,6 @@ Route::get('/', function () {
     sleep(0);
     return inertia('Home');
 });
-Route::get('/otro', function () {
-    sleep(0);
-    return inertia('MangaPage');
-});
 
 Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);

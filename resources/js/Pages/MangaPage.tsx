@@ -1,4 +1,4 @@
-import { StatsCardList, AuthorCard, CharacterList, LoadingBanner, ReviewCardList} from '../Components';
+import { StatsCardList, AuthorCard, CharacterList, LoadingBanner, ReviewCardList, ErrorMangaCard} from '../Components';
 import { MangaBanner, CardList} from '../Components';
 
 import { useEffect, useRef, useState } from 'react';
@@ -213,23 +213,29 @@ interface firstProp {
 const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
     const [manga, setManga] = useState<Manga | null>(null);
     const [loadingManga, setLoadingManga] = useState(true);
+    const [mangaErrors, setMangaErros] = useState(false);
 
     const [recommendation, setRecommendations] = useState<Recommendations | null>(null);
     const [halfRecommend, setHalfRecommend] = useState<Recommendation[] | null>(null)
     const [loadingRecommend, setLoadingRecommend] = useState(true);
+    const [recommendationError, setRecommendError] = useState(false);
 
     const [related, setRelated] = useState<FullManga[] | null>(null);
     const [parsedRel, setParsedRel] = useState<ParsedManga[] | null>(null);
+    const [relatedError, setRelatedError] = useState(false);
     const [loadingRel, setLoadingRel] = useState(true);
 
     const [characters, setCharacters] = useState<Character[] | null>(null);
+    const [charactersError, setCharactersError] = useState(false);
     const [loadingChars, setLoadingChars] = useState(true);
 
     const [authors, setAuthors] = useState<AuthorFull[] | null>(null);
+    const [authorsError, setAuthorsError] = useState(false);
     const [loadingAuthors, setLoadingAuthors] = useState(true);
 
     const [reviews, setReviews] = useState<Reviews | null>(null);
     const [loadingReviews, setLoadingReviews] = useState(true);
+    const [reviewsError, setReviewError] = useState(false);
     const [reviewPage, setReviewPage] = useState<number>(0);
 
     const [information, setInfo] = useState<InfoCard | null>(null);
@@ -259,11 +265,11 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
             const response = await petition.json();
             return response.data;
         } catch (error) {
-            console.error(error);
+            return {error:true};
         }
     }
 
-    const fetchPostData = async (endpoint:string, body:string, option?:TabOption) =>  {
+    const fetchPostData = async (endpoint:string, body:string) =>  {
         const csrf_token = await getCsrfToken();
         try {
             const petition = await fetch(endpoint, 
@@ -280,7 +286,7 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
             const response = await petition.json();
             return response;
         } catch (error) {
-            console.error('The error is: ' + error)
+            return {error:true}
         }
     }
     function transformRelations (obj:PlainRel[]):ParsedManga[] {
@@ -328,8 +334,12 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
 
         const enpoint = `/mangas/manga/related`;
         const body = JSON.stringify({data: dataToSend});
-        const data = await fetchPostData(enpoint, body, 'related')
-        setRelated(data);
+        const data = await fetchPostData(enpoint, body)
+        if (!data.error) {
+            setRelated(data);
+        } else {
+            setRelatedError(true);
+        }
         setLoadingRel(false);
     }
 
@@ -338,17 +348,27 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         const body = JSON.stringify({mangaId: mangaId});
 
         const data = await fetchPostData(endpoint, body);
-        console.log(data.data);
         
-        setManga(data.data)
+        if (!data.error) {
+            setManga(data);
+        } else {
+            setMangaErros(true);
+        }
         setLoadingManga(false);
+    }
+    if (mangaErrors) {
+        throw new Error("Upsie... I did something wrong.");
     }
 
     async function runCharFetch() {
         if(!manga) return
         const endpoint = `/mangas/manga/${manga.mal_id}/characters`;
         const response = await fetchGetData(endpoint);
-        setCharacters(response);
+        if (!response.error) {
+            setCharacters(response);
+        } else {
+            setCharactersError(true);
+        }
         setLoadingChars(false);
     }
 
@@ -359,22 +379,33 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         
         const body = JSON.stringify({authors_ids: ids, manga_id: manga.mal_id})
 
-        const data = await fetchPostData(endpoint, body, 'authors');
-        setAuthors(data)
+        const data = await fetchPostData(endpoint, body);
+        if (!data.error) {
+            setAuthors(data)            
+        } else {
+            setAuthorsError(true);
+        }
         setLoadingAuthors(false);
     }
+    console.log(recommendationError);
+    
 
     async function runRecommendFetch() {
         const endpoint = `/mangas/manga/getRecommendations`;
-        const body = JSON.stringify({mangaId: mangaId});
+        if (!manga) return;
+        const body = JSON.stringify({mangaId: manga.mal_id});
     
         const data = await fetchPostData(endpoint, body);
-        if (data.length > 10) {
-            const mixedData = mixArray(data);
-            setHalfRecommend(mixedData.slice(0, 10));
+        if (!data.error) {
+            if (data.length > 10) {
+                const mixedData = mixArray(data);
+                setHalfRecommend(mixedData.slice(0, 10));
+            }
+            setRecommendations(data);    
+        } else {
+            setRecommendError(true);
         }
         
-        setRecommendations(data);
         setLoadingRecommend(false)
     }
 
@@ -384,9 +415,13 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         const body = JSON.stringify({mangaId: manga?.mal_id, page:page});
 
         const data = await fetchPostData(endpoint, body);
-        console.log(data);
+        if (!data.error) {
+            setReviews(data);
+        } else {
+            setReviewError(true);
+        }
         
-        setReviews(data);
+        setLoadingReviews(false);
     }
 
     const reviewRef = useRef<HTMLElement>(null)
@@ -433,7 +468,6 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         if (reviewPage !== 0 && reviews !== null) {
             setReviews(null);
             runReviews();
-            console.log('SE APRETO EL BOTONCITO REVIEW');
         }
     }, [reviewPage])
 
@@ -452,7 +486,7 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
     return (
         <>
         <div className='w-full h-full relative pt-10'>
-            {manga !== null && 
+            {manga && !mangaErrors && !loadingManga &&
                 <>
                 <section className='overflow-hidden flex flex-nowrap z-2 py-0 px-0 lg:px-[5rem] py-[3rem]'>
                     <MangaBanner manga={manga}></MangaBanner>
@@ -485,18 +519,28 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
                     </section>
 
                     {statOpt === 'related' && 
-                        <section>
-                            {loadingRel && parsedRel !== null && 
+                        <section className="relative z-11 my-0 mx-2 md:mx-[7.5rem] sm:mx-[1rem] pb-16">
+                            {loadingRel && parsedRel !== null && !relatedError &&
                                 <RelatedCardList prop={{plainMangas: parsedRel, setLoading:true}}/>
                             }
-                            {!loadingRel && related !== null && 
+                            {!loadingRel && related !== null && !relatedError &&
                                 <RelatedCardList prop={{mangas: related, setLoading:false}}/>
+                            }
+                            {!related && !loadingRel && !relatedError && 
+                                <div className='bg-[#2D2D2D]'>
+                                    <div className='mt-2 p-4 text-[16px]'>
+                                        <span>No relations has been found</span>
+                                    </div>
+                                </div>
+                            }
+                            {!loadingRel && relatedError && 
+                               <ErrorMangaCard />
                             }
                         </section>
                     }
 
                     {statOpt === 'authors' && 
-                        <section>
+                        <section className="relative z-11 my-0 mx-2 md:mx-[7.5rem] sm:mx-[1rem] pb-16">
                             {loadingAuthors && authors === null &&
                                 <AuthorCard setLoading={true} entries={manga.authors}/>
                             
@@ -504,12 +548,24 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
                             {!loadingAuthors && authors !== null &&
                                 <AuthorCard setLoading={false} entries={authors}/>
                             }
+                            {!loadingAuthors && !authors && !authorsError && 
+                                <div className='bg-[#2D2D2D]'>
+                                    <div className='mt-2 p-4 text-[16px]'>
+                                        <span>No authors has been found</span>
+                                    </div>
+                                </div>
+                            }
+                            {!loadingAuthors && authorsError && 
+                                <div className='p-4 w-full flex justify-center bg-[#2D2D2D] text-14 md:text-18 sm:text-16 mt-2 md:mt-6 sm:mt-4'>
+                                    <span>Oops... Something went wrong.</span>
+                                </div>
+                            }
                         </section>
                         
                     }
 
                     {statOpt === 'characters' && 
-                        <section>
+                        <section className="relative z-11 my-0 mx-2 md:mx-[7.5rem] sm:mx-[1rem] pb-16">
                             {loadingChars && 
                                 <article className='p-8 flex justify-center align-center'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>
@@ -517,6 +573,16 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
                             }
                             {!loadingChars && characters !== null &&
                                 <CharacterList charList={characters} limitPerPage={20}/>
+                            }
+                            {!loadingChars && !characters && !charactersError && 
+                                <div className='bg-[#2D2D2D]'>
+                                    <div className='mt-2 p-4 text-[16px]'>
+                                        <span>No reviews has been found</span>
+                                    </div>
+                                </div>
+                            }
+                            {!loadingChars && charactersError && 
+                               <ErrorMangaCard />
                             }
                         </section>
                     }
@@ -530,13 +596,23 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
                     }
                     {statOpt === 'review' && 
                         <section ref={reviewRef} className='my-0 md:px-[7.5rem]'>
-                            {reviews !== null &&
+                            {reviews && !loadingReviews &&
                                 <ReviewCardList showManga={false} reviews={reviews.data} pagination={reviews.pagination} actual_page={reviewPage} changePage={changeReviewPage}/>
                             }
-                            {reviews === null && 
+                            {loadingReviews && 
                                 <article className='p-8 flex justify-center align-center'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>
                                 </article>
+                            }
+                            {!reviews && !reviewsError && !loadingReviews && 
+                                <div className='bg-[#2D2D2D]'>
+                                    <div className='mt-2 p-4 text-[16px]'>
+                                        <span>No reviews has been found</span>
+                                    </div>
+                                </div>
+                            }
+                            {!loadingReviews && reviewsError && 
+                               <ErrorMangaCard />
                             }
                         </section>
                     }
@@ -547,31 +623,35 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
                     <div className="text-[26px] sm:text-[32px] mt-4">
                         <strong>Recommendations</strong>
                     </div>
-                    {halfRecommend !== null && <CardList manga={halfRecommend} />}
-                    {halfRecommend === null && loadingRecommend && 
+                    {halfRecommend && !loadingRecommend && !recommendationError &&  <CardList manga={halfRecommend} />}
+                    {!halfRecommend && loadingRecommend && 
                         <article className='p-8 flex justify-center align-center'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>
                         </article>
                     }
-                    {halfRecommend === null && !loadingRecommend && 
+                    {!halfRecommend && !loadingRecommend && !recommendationError &&
                         <div className='bg-[#2D2D2D]'>
                             <div className='mt-2 p-4 text-[16px]'>
                                 <span>No recommendation has been found</span>
                             </div>
                         </div>
                     }
+                    {!loadingRecommend && recommendationError &&
+                        <div className='p-4 w-full flex justify-center bg-[#2D2D2D] text-14 md:text-18 sm:text-16 mt-2 md:mt-6 sm:mt-4'>
+                            <span>Oops... Something went wrong.</span>
+                        </div>
+                    }
                 </section>
                 </>
             }
-            {manga === null && 
-                <section className='flex flex-col w-full gap-y-14 justify-center z-2 py-0 px-0 lg:px-[5rem] py-[3rem]'>
+            {!manga && loadingManga && !mangaErrors &&
+                <section className='flex flex-col w-full gap-y-14 justify-center z-2 py-0 px-0 lg:px-[5rem] py-[4rem]'>
                     <LoadingBanner />
                     <article className='p-8 flex justify-center align-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>
                     </article>
                 </section>
             }
-            
         </div>
 
         </>

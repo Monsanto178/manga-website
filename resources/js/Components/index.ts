@@ -27,4 +27,5 @@ export * from "./AuthorCard/AuthorWorkCard";
 export * from "./AuthorCard/AuthorFullCard";
 export * from "./AuthorCard/LoadingFullCard ";
 export * from "./Review/LoadingReviews";
+export * from "./ErrorCard/ErrorMangaCard";
 // export * from "./MangaCard/MangaCard"

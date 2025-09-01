@@ -1,7 +1,6 @@
 import cover_img from '../assets/images/flcl.png';
-import { CardList, SearchResult } from '../Components';
+import { CardList, ErrorMangaCard, SearchResult } from '../Components';
 import { useEffect, useRef, useState } from 'react';
-
 
 interface Manga {
     mal_id:number;
@@ -14,22 +13,17 @@ interface Manga {
     title:string;
 }
 
-type SearchResult = {
-    pagination:{
-        last_visible_page:number;
-        current_page:number;
-        items:{
-            total:number;
-        }
-    }
-    data:Array<Manga>;
-}
-
 const Home= (): React.JSX.Element  => {
     const [topMangas, setTopMangas] = useState<Manga[]>([]);
     const [populars, setPopulars] = useState<Manga[]>([]);
     const [recents, setRecents] = useState<Manga[]>([]);
     const [recommendations, setRecommentions] = useState<Manga[]>([]);
+
+    const [topError, setTopError] = useState(false);
+    const [popularError, setPopularError] = useState(false);
+    const [recentError, setRecentError] = useState(false);
+    const [recommendError, setRecommendError] = useState(false);
+
 
     const [loadingRec, setLoadingRec] = useState(true);
     const [loadingRecent, setLoadingRecent] = useState(true);
@@ -37,73 +31,71 @@ const Home= (): React.JSX.Element  => {
     const [loadingPop, setLoadingPop] = useState(true);
 
 
-    const fetchData = async(mangaType:string, endpoint:string) => {
+    const fetchData = async(endpoint:string) => {
         try {
             const res = await fetch(endpoint);
-            if(!res.ok) throw new Error("An error has occurred.");
+            if(!res.ok) throw new Error("");
             const mangas = await res.json();
 
-            switch (mangaType) {
-                case 'top':
-                    setTopMangas(mangas.data)
-                    break;
-                case 'popular':
-                    setPopulars(mangas.data)
-                    break;
-                case 'recent':
-                    setRecents(mangas.data)
-                    break;
-                case 'recommendation':
-                    setRecommentions(mangas.data)
-                    break;
-                default:
-                    break;
-            }
+            return {data: mangas.data, error:false};
         } catch (error) {
             console.error(error);
-        } finally {
-            switch (mangaType) {
-                case 'top':
-                    setLoadingTop(false)
-                    break;
-                case 'popular':
-                    setLoadingPop(false)
-                    break;
-                case 'recent':
-                    setLoadingRecent(false)
-                    break;
-                case 'recommendation':
-                    setLoadingRec(false)
-                    break;
-                default:
-                    break;
-            }
+            return {error:true}
         }
     }
 
     const fetchPopular = async() => {
         const endpoint = '/mangas/popular';
 
-        fetchData('popular', endpoint);
+        const response = await fetchData(endpoint);
+        if(response.error) {
+            setPopularError(true);
+            setLoadingPop(false);
+            return
+        }
+        setPopulars(response.data);
+        setLoadingPop(false);
     }
     
     const fetchRecommend = async() => {
         const endpoint = '/mangas/recommendation';
 
-        fetchData('recommendation',endpoint);
+        const response = await fetchData(endpoint);
+        if(response.error) {
+            setRecommendError(true);
+            setLoadingRec(false);
+            return
+        }
+        setRecommentions(response.data);
+        setLoadingRec(false)
     }
     const fetchTop = async() => {
         const endpoint = '/mangas/top';
 
-        fetchData('top', endpoint);
+        const response = await fetchData(endpoint);
+        if (response.error) {
+            setTopError(true); 
+            setLoadingTop(false);
+            return
+        }
+        setTopMangas(response.data);
+        setLoadingTop(false)
     }
     const fetchRecent = async() => {
         const endpoint = '/mangas/recent'
 
-        fetchData('recent', endpoint);
+        const response = await fetchData(endpoint);
+        if(response.error) {
+            setRecentError(true);
+            setLoadingRecent(false);
+            return
+        }
+        setRecents(response.data);
+        setLoadingRecent(false);
     }
 
     useEffect(() => {
+        
         fetchTop();
         fetchPopular();
 
@@ -154,7 +146,10 @@ const Home= (): React.JSX.Element  => {
                     </a>
                 </div>
                 {loadingTop && <CardList manga={null}></CardList>}
-                {!loadingTop && <CardList manga={topMangas}></CardList>}
+                {!loadingTop && !topError && <CardList manga={topMangas}></CardList>}
+                {!loadingTop && topError && 
+                    <ErrorMangaCard />
+                }
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
@@ -167,7 +162,10 @@ const Home= (): React.JSX.Element  => {
                     </a>
                 </div>
                 {loadingPop && <CardList manga={null}></CardList>}
-                {!loadingPop && <CardList manga={populars}></CardList>}
+                {!loadingPop && !popularError && <CardList manga={populars}></CardList>}
+                {!loadingPop && popularError && 
+                    <ErrorMangaCard />
+                }
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
@@ -180,7 +178,10 @@ const Home= (): React.JSX.Element  => {
                     </a>
                 </div>
                 {loadingRecent && <CardList manga={null}></CardList>}
-                {!loadingRecent && <CardList manga={recents}></CardList>}
+                {!loadingRecent && !recentError && <CardList manga={recents}></CardList>}
+                {!loadingRecent && recentError && 
+                    <ErrorMangaCard />
+                }
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
@@ -188,7 +189,10 @@ const Home= (): React.JSX.Element  => {
                     <strong>Recommendations</strong>
                 </div>
                 {loadingRec && <CardList manga={null}></CardList>}
-                {!loadingRec && <CardList manga={recommendations} />}
+                {!loadingRec && !recommendError &&  <CardList manga={recommendations} />}
+                {!loadingRec && recommendError && 
+                    <ErrorMangaCard />
+                }
             </section>
         </section>
         </>

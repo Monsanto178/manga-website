@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { CategoryPagination, FullCardList , CategoryLoading, OrderCard} from "../Components";
+import { CategoryPagination, FullCardList , CategoryLoading, OrderCard, ErrorMangaCard} from "../Components";
 
 type Type = "manga" | "novel" | "lightnovel" | "oneshot" | "doujin" | "manhwa" | "manhua";
 type Status = 'publishing' | 'complete' | 'discontinued' | 'hiatus' | 'upcoming';
@@ -74,6 +74,7 @@ const CategoryMangaPage = (category:Category) => {
     const [isLoading, setLoading] = useState(true);
     const [actualPage, setActualPage] = useState(category.page);
     const [mangas, setMangas] = useState<Mangas | null>(null);
+    const [mangasError, setMangasError] = useState(false);
     const mangasRef = useRef<HTMLElement>(null);
 
     const [orderBy, setOrderBy] = useState<OrderBy | null>(category.order_by);
@@ -107,6 +108,7 @@ const CategoryMangaPage = (category:Category) => {
             setFiltered(false);
             return response;
         } catch (error) {
+            setMangasError(true);
             console.error('The error is: ' + error)
         }
     }
@@ -115,7 +117,7 @@ const CategoryMangaPage = (category:Category) => {
         const endpoint = `/tags/getMangas`;
         const body = JSON.stringify(parameters);
         const data = await fetchData(endpoint, body);
-
+        
         setMangas(data);
         setLoading(false);
     }
@@ -192,36 +194,38 @@ const CategoryMangaPage = (category:Category) => {
     useEffect(() => {
         if (mangas === null) {
             runFetch(params);
-        } else {
-            console.log('There is not need to fetch the data.');
         }
     }, [])
 
     useEffect(() => {
         runFetch(params);
-        console.log(mangas);
     }, [actualPage, params])
 
     return (
         <>
-        <div className="flex flex-col w-full">
+        <div className={`flex flex-col w-full h-full sm:h-[100dvh]`}>
             <section className="my-4 flex flex-col px-[4.2rem] pt-20 gap-y-2">
                 <div className="text-[22px] md:text-[32px] sm:text-[26px] flex flex-row items-center gap-x-[1rem]">
                     <strong>{category.query ? `Search results for: "${category.query}" (${mangas?.pagination.items?.total ? mangas?.pagination.items?.total : 0} results)` :category.name}</strong>
                 </div>
             </section>
 
-            <section className="my-8 flex flex-col px-[4.2rem] gap-y-2">
-                <OrderCard props={{actualType:type, actualOrder:orderBy, actualStatus:status, actions:{changeOrder, applyFilter}}}/>
+            <section className="mb-8 mt2 flex flex-col px-[4.2rem] gap-y-2">
+                <OrderCard props={{actualType:type, actualOrder:orderBy, actualStatus:status, actions:{changeOrder, applyFilter}, hasError:mangasError || isLoading}}/>
             </section>
 
-            <section ref={mangasRef}>
+            <section ref={mangasRef} className={`${mangasError ? 'px-[4.2rem]' : ''}`}>
                 {isLoading && 
                     <CategoryLoading />                }
-                {!isLoading && mangas !== null &&
+                {!isLoading && mangas !== null && !mangasError &&
                     <FullCardList data={mangas.data} pagination={mangas.pagination}/>
                 }
-                {mangas !== null && !isFiltered &&
+                {mangasError && !isLoading && 
+                    <div className='p-4 w-full flex justify-center bg-[#2D2D2D] mb-8 text-14 md:text-18 sm:text-16 mt-2 md:mt-6 sm:mt-4'>
+                        <span>Oops... Something went wrong.</span>
+                    </div>
+                }
+                {mangas !== null && !isFiltered && !mangasError &&
                 <article className="flex justify-center my-8">
                     <CategoryPagination pagination={mangas.pagination} actions={{changePage}}/>
                 </article>

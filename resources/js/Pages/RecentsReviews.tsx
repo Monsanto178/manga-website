@@ -36,6 +36,7 @@ type Review = {
 const RecentsReviews = () => {
     const [reviews, setReviews] = useState<Review[] | null>(null);
     const [loadingReviews, setLoadingReviews] = useState(true);
+    const [reviewError, setReviewError] = useState(false);
 
     const getCsrfToken = async () => {
         const response = await fetch('/csrf-token');
@@ -57,10 +58,12 @@ const RecentsReviews = () => {
             if(!response.ok) throw new Error("An error has occurred.");
             
             const data = await response.json();
-            setLoadingReviews(false);
             return data;
         } catch (error) {
-            console.error(error);
+            setReviewError(true);
+            return {error:true};
+        } finally {
+            setLoadingReviews(false);
         }
     }
 
@@ -70,13 +73,16 @@ const RecentsReviews = () => {
 
         setReviews(data);
     }
+    if(reviewError) {
+        throw new Error("Something went wrong.");
+    }
 
     useEffect(() => {
         runFetchReviews();
     }, [])
     return (
         <>
-        <section className="pt-20 pb-4 px-4 sm:px-[4.2rem] flex flex-col gap-y-8">
+        <section className={`pt-20 pb-4 px-4 sm:px-[4.2rem] flex flex-col gap-y-8 ${reviewError ? 'h-[100dvh]' : ''}`}>
             <article className="text-[26px] md:text-[32px]">
                 <div>
                     <strong>Recents Reviews</strong>
@@ -84,7 +90,7 @@ const RecentsReviews = () => {
             </article>
 
             <section className="flex flex-wrap justify-between gap-x-4 gap-y-12">
-                {reviews  !== null && !loadingReviews &&
+                {reviews  !== null && !loadingReviews && !reviewError &&
                     <ReviewCardList reviews={reviews}/>
                 }
                 {loadingReviews &&

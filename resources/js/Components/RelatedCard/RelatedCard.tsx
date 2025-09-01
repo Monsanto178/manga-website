@@ -30,7 +30,9 @@ type Relation = {
 
 export const RelatedCard = ({entry, relation}:Relation) => {
     const relacion = relation;
-    const uri = entry.type === 'manga' ? `/mangas/manga/${entry.mal_id}` : `/`;
+    const acceptedTypes = ['Light Novel', 'One-shot', 'Manga', 'Novel', 'Doujin', 'Manhwa', 'Manhua'];
+    
+    const uri = acceptedTypes.includes(entry.type) ? `/mangas/manga/${entry.mal_id}` : `/`;
     return (
         <>
         <style>
@@ -69,7 +71,7 @@ export const RelatedCard = ({entry, relation}:Relation) => {
                     </div>
                     <div className="flex justify-between">
                         <span>{entry.type}</span>
-                        <span>{entry.status}</span>
+                        <span>{entry.status.includes('Finished Airing') ? 'Finished' : entry.status}</span>
                     </div>
                 </div>
             </a>
