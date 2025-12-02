@@ -1,10 +1,9 @@
 interface Props {
     title:string;
     cover:string;
-    url?:string;
 }
 
-export const GenreCard = ({title, cover, url} : Props) => {
+export const GenreCard = ({title, cover} : Props) => {
     return (
         <>
         <a href="" className="p-4 w-64 h-32 inline-block">

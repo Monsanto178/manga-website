@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RelatedCard } from "./RelatedCard";
 import { LoadingCard } from "./LoadingCard";
+import { MangaType } from "../../Types";
 
 type PlainManga = {
     mal_id:number;
@@ -8,28 +9,8 @@ type PlainManga = {
     relation:string;
 }
 
-interface FullManga {
-    mal_id:number;
-    name:string;
-    title?:string;
-    type:string;
-    status:string;
-    images:{
-        jpg:{
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        }
-        webp:{
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        }
-    }
-}
-
 type FullRel = {
-    mangas: Array<{entry:FullManga; relation:string;}>
+    mangas: Array<{entry:MangaType; relation:string;}>
     setLoading: false;
 }
 type PlainRel = {

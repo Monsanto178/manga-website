@@ -1,13 +1,14 @@
+import { CardType } from "../../Types";
 import { GenreCard } from "./GenreCard"
 
-interface Card {
-    key:number;
-    title:string;
-    cover:string;
-    url?:string;
-}
+// interface Card {
+//     key:number;
+//     title:string;
+//     cover:string;
+// }
 interface List {
-    cards: Card[];
+    // cards: Card[];
+    cards: CardType[];
 }
 export const GenreCardList = ({cards} : List) => {
     return (
@@ -17,9 +18,9 @@ export const GenreCardList = ({cards} : List) => {
                 <span>Géneros</span>
             </div>
             <div className="overflow-x-auto whitespace-nowrap">
-                {cards.map((card) => {
+                {cards.map((card, idx) => {
                     return (
-                        <GenreCard cover={card.cover} title={card.title} key={card.key}></GenreCard>
+                        <GenreCard cover={card.cover} title={card.title} key={idx}></GenreCard>
                     )
                 })}
             </div>

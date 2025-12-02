@@ -10,8 +10,6 @@ interface Prop {
 }
 
 export const SearchBar = ({smallPort, visibleBar, toggleVisible, onKeyDown, onSearch, searchVal, setSearchVal, onFocus}:Prop) => {
-    //     console.log('is visible: ' + visibleBar);
-    // console.log('is small: ' + smallPort);
     return (
         <>
         {!smallPort &&

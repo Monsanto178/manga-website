@@ -1,31 +1,15 @@
 import { useEffect, useRef, useState } from "react"
 import { CharacterCard } from "./CharacterCard";
 import { PaginationCard } from "./PaginationCard";
-type Character = {
-    character:{
-        mal_id:number;
-        images:{
-            jpg:{
-                image_url:string;
-            },
-            webp:{
-                image_url:string;
-                small_image_url?:string;
-            }
-        };
-        name:string,
-    };
-    role:string;
-
-}
+import { CharacterType } from "../../Types";
 
 type CardProps = {
     limitPerPage:number;
-    charList: Character[];
+    charList: CharacterType[];
 }
 
 export const CharacterList = ({charList, limitPerPage} : CardProps) => {
-    const [charPerPage, setCharPerPage] = useState<Character[]>([]);
+    const [charPerPage, setCharPerPage] = useState<CharacterType[]>([]);
     
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(limitPerPage-1);
@@ -99,7 +83,7 @@ export const CharacterList = ({charList, limitPerPage} : CardProps) => {
         previous: previousPage
     }
 
-    const sliceCharacters = (charList: Character[]) => {
+    const sliceCharacters = (charList: CharacterType[]) => {
         const limitedChars = charList.slice(start, end+1);
         setCharPerPage(limitedChars);
     }

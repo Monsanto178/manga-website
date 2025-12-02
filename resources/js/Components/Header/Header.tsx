@@ -2,18 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import gatito from '../../assets/images/Gatito.png';
 import { SearchResult } from "../Search/SearchResult";
 import { SearchBar } from "../Search/SearchBar";
-
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status:string;
-    publishing?:boolean;
-    title:string;
-}
+import { MangaType } from "../../Types";
 
 type SearchResult = {
     pagination:{
@@ -23,7 +12,7 @@ type SearchResult = {
             total:number;
         }
     }
-    data:Array<Manga>;
+    data:Array<MangaType>;
 }
 
 interface Props {

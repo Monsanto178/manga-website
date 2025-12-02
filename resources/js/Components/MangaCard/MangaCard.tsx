@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status?:string;
-    publishing?:boolean;
-    title:string;
-}
+import { MangaType } from "../../Types";
 
 interface Props {
-    manga: Manga;
+    manga: MangaType;
     handleTransitionEnd: () => void;
     isTransitioning?:boolean;
     selectedIdx?:number;

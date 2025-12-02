@@ -1,26 +1,9 @@
-type Character = {
-    mal_id:number;
-    images:{
-        jpg:{
-            image_url:string;
-        },
-        webp:{
-            image_url:string;
-            small_image_url?:string;
-        }
-    };
-    name:string,
-}
+import { CharacterType } from "../../Types";
 
-type CharacterProps = {
-    character: Character;
-    role:string;
-}
-
-export const CharacterCard = ({character, role} : CharacterProps) => {
+export const CharacterCard = ({character, role} : CharacterType) => {
     return (
         <>
-            <a href='/' className="relateCard flex flex-col sm:flex-row text-white w-[110px] h-[220px] sm:min-w-[300px] sm:w-[31%] sm:max-w-[500px] sm:h-[160px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
+            <button className="relateCard flex flex-col sm:flex-row text-white w-[110px] h-[220px] sm:min-w-[300px] sm:w-[31%] sm:max-w-[500px] sm:h-[160px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
                 <picture className="w-[100%] h-[60%] min-w-[105px] sm:h-auto sm:w-[30%] sm:min-w-[119px] sm:max-h-[160px]">
                     <img className="w-full h-full object-cover object-center" src={character.images.webp.image_url} alt="img" />
                 </picture>
@@ -28,7 +11,7 @@ export const CharacterCard = ({character, role} : CharacterProps) => {
                     <div className="flex flex-col">
                         <div className="w-full">
                             <strong 
-                            className="block text-[14px] sm:text-[16px] w-full overflow-hidden text-ellipsis"
+                            className="block text-[14px] sm:text-[16px] w-fit overflow-hidden text-ellipsis"
                                 style={{
                                     display: '-webkit-box',
                                     WebkitLineClamp: 2,
@@ -41,7 +24,7 @@ export const CharacterCard = ({character, role} : CharacterProps) => {
                         <span>{role}</span>
                     </div>
                 </div>
-            </a>
+            </button>
             {/* <a href='/' className="relateCard flex flex-col text-white w-[100px] h-[220px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
                 <picture className="w-[100%] h-[60%]">
                     <img className="w-full h-full object-cover object-center" src={character.images.webp.image_url} alt="img" />

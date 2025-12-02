@@ -1,39 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-
-type Manga = {
-    mal_id:number;
-    images:{jpg:{image_url:string}, webp:{image_url:string}};
-    title:string;
-}
-
-type User = {
-    username:string;
-    images:{jpg:{image_url:string}, webp:{image_url:string}}
-    url?: string;
-}
-
-type Review = {
-    mal_id:number;
-    type?:string;
-    date:string;
-    review:string;
-    reactions?:{
-        overall: 0,
-        nice: 0,
-        love_it: 0,
-        funny: 0,
-        confusing: 0,
-        informative: 0,
-        well_written: 0,
-        creative: 0
-    };
-    tags:Array<string>
-    entry:Manga;
-    user:User;
-}
+import { ReviewType } from "../../Types";
 
 interface Props {
-    review: Review;
+    review: ReviewType;
     showManga?:boolean;
 }
 

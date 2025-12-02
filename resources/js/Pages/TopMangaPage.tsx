@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { CategoryPagination, FullCardList , CategoryLoading, OrderCard} from "../Components";
+import { PagedMangaType } from "../Types";
 
 type Type = "manga" | "novel" | "lightnovel" | "oneshot" | "doujin" | "manhwa" | "manhua";
 type Status = 'publishing' | 'complete' | 'discontinued' | 'hiatus' | 'upcoming';
@@ -13,40 +14,6 @@ interface Category {
     type: Type | null;
     order_by: OrderBy;
 };
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        },
-        webp: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        }
-    }
-    title:string;
-    type:string;
-    chapters:number;
-    status:string;
-    favorites:number;
-    synopsis:string;
-    score:number;
-    genres:[];
-    demographics:[]
-}
-
-type Mangas = {
-    pagination: {
-        last_visible_page:number;
-        has_next_page:boolean;
-        current_page:number;
-    }
-    data: Array<Manga>;
-}
 
 type Params = {
     page:string;
@@ -70,7 +37,7 @@ const TopMangaPage = (category:Category) => {
 
     const [isLoading, setLoading] = useState(true);
     const [actualPage, setActualPage] = useState(category.page);
-    const [mangas, setMangas] = useState<Mangas | null>(null);
+    const [mangas, setMangas] = useState<PagedMangaType | null>(null);
     const [mangasError, setMangasError] = useState(false);
     const mangasRef = useRef<HTMLElement>(null);
 
@@ -164,7 +131,7 @@ const TopMangaPage = (category:Category) => {
 
     return (
         <>
-        <div className={`flex flex-col w-full pt-20 ${mangasError ? 'h-[100dvh]' : ''}`}>
+        <div className={`flex flex-col w-full pt-20 ${isLoading ? 'h-full sm:h-[100dvh]' : ''}`}>
             <section className="my-4 flex flex-col px-[4.2rem] gap-y-2">
                 <div className="text-[20px] md:text-[24px] flex flex-row items-center gap-x-[1rem]">
                     <strong>{category.name}</strong>

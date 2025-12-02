@@ -1,41 +1,8 @@
+import { MangaType, PagedMangaType } from "../../Types";
 import { FullMangaCard } from "./FullMangaCard"
 import { CategoryPagination } from "./PaginationCard";
 
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        },
-        webp: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        }
-    }
-    title:string;
-    type:string;
-    chapters:number;
-    status:string;
-    favorites:number;
-    synopsis:string;
-    score:number;
-    genres:[];
-    demographics:[]
-}
-
-type Mangas = {
-    pagination: {
-        last_visible_page:number;
-        has_next_page:boolean;
-        current_page:number;
-    }
-    data: Array<Manga>;
-}
-
-export const FullCardList = (props:Mangas) => {
+export const FullCardList = (props:PagedMangaType) => {
     return (
     <>
         <style>

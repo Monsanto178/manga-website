@@ -2,19 +2,10 @@ import { MangaCard } from "./MangaCard"
 import '../../../css/mangaCard.css'
 import Skeleton from "react-loading-skeleton";
 import { useEffect, useState } from "react";
+import { MangaType } from "../../Types";
 
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status?:string;
-    publishing?:boolean;
-    title:string;
-}
 interface MangaList {
-    manga: Array<Manga> | null
+    manga: Array<MangaType> | null
 }
 export const CardList = ({manga} : MangaList) => {
     const halfManga = manga ? manga.slice(0, Math.floor(manga.length / 2) + 1) : [];

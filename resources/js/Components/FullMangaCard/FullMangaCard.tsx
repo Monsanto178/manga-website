@@ -1,32 +1,8 @@
+import { MangaType } from "../../Types";
 import { TagList } from "../Tag/TagList";
 
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        },
-        webp: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        }
-    }
-    title:string;
-    type:string;
-    chapters:number;
-    status:string;
-    favorites:number;
-    synopsis:string;
-    score:number;
-    genres:[];
-    demographics:[]
-}
-
 type Props = {
-    data: Manga;
+    data: MangaType;
 }
 
 export const FullMangaCard = ({data} :Props) => {

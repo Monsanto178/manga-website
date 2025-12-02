@@ -1,40 +1,9 @@
+import { ReviewType } from "../../Types";
 import { Pagination } from "./Pagination";
 import { ReviewCard } from "./ReviewCard";
 
-type Manga = {
-    mal_id:number;
-    images:{jpg:{image_url:string}, webp:{image_url:string}};
-    title:string;
-}
-
-type User = {
-    username:string;
-    images:{jpg:{image_url:string}, webp:{image_url:string}}
-    url?: string;
-}
-
-type Review = {
-    mal_id:number;
-    type?:string;
-    date:string;
-    review:string;
-    reactions?:{
-        overall: 0,
-        nice: 0,
-        love_it: 0,
-        funny: 0,
-        confusing: 0,
-        informative: 0,
-        well_written: 0,
-        creative: 0
-    };
-    tags:Array<string>
-    entry:Manga;
-    user:User;
-}
-
 interface Props {
-    reviews: Review[];
+    reviews: ReviewType[];
     pagination?:{has_next_page:boolean};
     actual_page?:number;
     showManga?:boolean;

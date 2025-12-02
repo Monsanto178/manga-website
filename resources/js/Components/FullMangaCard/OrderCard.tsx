@@ -54,7 +54,11 @@ export const OrderCard = ({props}:Props) => {
             </div>
         </article>
         <article className="flex justify-end my-4">
-            <button onClick={() => props.hasError ? {} : props.actions.applyFilter()} className={`${props.hasError ? 'bg-[#363636]' : 'bg-[#FF6740] cursor-pointer'} w-[7rem] rounded-[10px] h-10 `} disabled={true}>
+            <button 
+                onClick={() => props.hasError ? {} : props.actions.applyFilter()} 
+                className={`${props.hasError 
+                    ? 'bg-[#363636]' 
+                    : 'bg-[#FF6740] cursor-pointer'} w-[7rem] rounded-[10px] h-10 `} disabled={props.hasError}>
                 <strong>Apply Filters</strong>
             </button>
         </article>

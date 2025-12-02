@@ -1,16 +1,7 @@
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status:string;
-    publishing?:boolean;
-    title:string;
-}
+import { MangaType } from "../../Types";
 
 type Props = {
-    manga: Manga;
+    manga: MangaType;
 }
 
 export const SearchMangaCard = ({manga}:Props) => {

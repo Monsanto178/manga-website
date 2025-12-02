@@ -1,92 +1,9 @@
 import { useState } from "react";
 import { TagList } from "../Tag/TagList";
-
-interface Tag {
-    key:number;
-    name: string;
-}
-
-interface Card {
-    title:string;
-    cover:string;
-    status:string;
-    description?:string;
-}
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string, large_image_url?:string},
-        webp:{image_url:string, small_image_url:string, large_image_url?:string}
-    };
-    status:string;
-    publishing:boolean;
-    published: {
-        prop:{
-            from:{
-                day:number,
-                month:number,
-                year:number
-            },
-            to?:{
-                day:number,
-                month:number,
-                year:number
-            }
-        }
-        string: string;
-    };
-    title:string;
-    synopsis:string;
-    background?:string;
-    titles:Array<{type:string, title:string}>;
-    type:string;
-    authors:
-        Array<{
-            mal_id:number,
-            type:string,
-            name:string
-        }>
-    score: number | null;
-    favorites: number | null;
-    rank: number | null;
-    volumes:number | null;
-    chapters:number | null;
-    genres:[
-        {
-            mal_id:number,
-            type:string,
-            name:string
-        }
-    ];
-    themes:[
-        {
-            mal_id:number,
-            type:string,
-            name:string
-        }
-    ];
-    demographics:
-        Array<{
-            mal_id:number,
-            type:string,
-            name:string
-        }>;
-    serializations:
-        Array<{
-            mal_id:number,
-            type:string,
-            name:string
-        }>;
-    relations:
-        Array<{
-            relation:string,entry:Array<{mal_id:number,type:string,name:string,url:string}>
-        }>
-    external:Array<{name:string,url:string}>
-}
+import { FullMangaType } from "../../Types/FullMangaType";
 
 interface MangaContainer {
-    manga: Manga;
+    manga: FullMangaType;
 }
 
 export const MangaBanner = ({manga} : MangaContainer) => {

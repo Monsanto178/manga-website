@@ -1,22 +1,10 @@
 import { useState } from "react";
 import { Banner } from "./Banner";
+import { CardType } from "../../Types";
 
-interface Tag {
-    mal_id:number;
-    name: string;
-}
-
-interface Card {
-    id:number;
-    title:string;
-    cover:string;
-    tags:Tag[];
-    author:string;
-    description:string;
-}
 
 interface CardList {
-    cards: Card[];
+    cards: CardType[];
 }
 
 export const BannerList = ({cards} : CardList) => {
@@ -36,10 +24,10 @@ export const BannerList = ({cards} : CardList) => {
     }
     return (
         <>
-        {cards.map((card) => {
+        {cards.map((card, idx) => {
             return (
             <div className="relative bg-cover bg-center w-full h-full flex-shrink-0 flex-grow-0 text-white" style={{translate: `${-100 * cardIndex}%`, transition:"translate 600ms ease-in-out"}}>
-                <Banner key={card.id} author={card.author} cover={card.cover} tags={card.tags} title={card.title} description={card.description} ></Banner>
+                <Banner key={idx} card={card} ></Banner>
                 <div className="bg-black flex justify-center">
                     <button onClick={previousCard} className="cursor-pointer p-2">Previous</button>
                     {cards.map((_, index) => {

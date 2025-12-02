@@ -1,23 +1,13 @@
 import cover_img from '../assets/images/flcl.png';
 import { CardList, ErrorMangaCard, SearchResult } from '../Components';
 import { useEffect, useRef, useState } from 'react';
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status:string;
-    publishing?:boolean;
-    title:string;
-}
+import { MangaType } from '../Types';
 
 const Home= (): React.JSX.Element  => {
-    const [topMangas, setTopMangas] = useState<Manga[]>([]);
-    const [populars, setPopulars] = useState<Manga[]>([]);
-    const [recents, setRecents] = useState<Manga[]>([]);
-    const [recommendations, setRecommentions] = useState<Manga[]>([]);
+    const [topMangas, setTopMangas] = useState<MangaType[]>([]);
+    const [populars, setPopulars] = useState<MangaType[]>([]);
+    const [recents, setRecents] = useState<MangaType[]>([]);
+    const [recommendations, setRecommentions] = useState<MangaType[]>([]);
 
     const [topError, setTopError] = useState(false);
     const [popularError, setPopularError] = useState(false);

@@ -1,15 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LoadingCard } from "./LoadingCard";
-
-type Author = {
-    mal_id: number;
-    name:string;
-    image_url?:string;
-    position?:string;
-}
+import { AuthorType } from "../../Types";
 
 type AuthorProps = {
-    entries: Author[];
+    entries: AuthorType[];
     setLoading: boolean;
 }
 
@@ -48,9 +42,7 @@ export const AuthorCard = ({entries, setLoading= false}:AuthorProps) => {
         {!setLoading &&
         <article ref={authorsRef} className="grid" style={{gridTemplateColumns:'repeat(auto-fill, 400px)', rowGap:'3rem', columnGap:'3rem'}}>
         {
-        entries.map((author) => {
-            console.log(author);
-            
+        entries.map((author, idx) => {
             let rol = '';
             switch (author.position) {
                 case 'Story & Art':
@@ -66,7 +58,7 @@ export const AuthorCard = ({entries, setLoading= false}:AuthorProps) => {
                     break;
             }
             return (
-                <>
+                <React.Fragment key={idx}>
                 <style>
                 {`
                 @media (max-width: 887px) {
@@ -106,7 +98,7 @@ export const AuthorCard = ({entries, setLoading= false}:AuthorProps) => {
                         </div>
                     </div>
                 </a>
-                </>
+                </React.Fragment>
             )
         })}
         </article>

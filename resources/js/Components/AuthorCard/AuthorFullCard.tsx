@@ -1,24 +1,8 @@
 import { useEffect, useState } from "react";
-
-type Author = {
-    mal_id:number;
-    images:{
-        jpg:{
-            image_url:string
-        }
-    }
-    name:string;
-    given_name?:string;
-    family_name?:string;
-    alternate_names?: Array<string>;
-    birthday:string;
-    favorites:number;
-    about:string;
-    website_url?:string;
-}
+import { FullAuthorType } from "../../Types";
 
 type Prop = {
-    author: Author;
+    author: FullAuthorType;
 }
 export const AuthorFullCard = ({author}:Prop) => {
     const [homeTown, setHomeTown] = useState<string | null>(null);

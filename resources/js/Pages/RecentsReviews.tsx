@@ -1,40 +1,9 @@
 import { useEffect, useState } from "react";
 import { LoadingReviews, ReviewCardList } from "../Components";
-
-type Manga = {
-    mal_id:number;
-    images:{jpg:{image_url:string}, webp:{image_url:string}};
-    title:string;
-}
-
-type User = {
-    username:string;
-    images:{jpg:{image_url:string}, webp:{image_url:string}}
-    url?: string;
-}
-
-type Review = {
-    mal_id:number;
-    type?:string;
-    date:string;
-    review:string;
-    reactions?:{
-        overall: 0,
-        nice: 0,
-        love_it: 0,
-        funny: 0,
-        confusing: 0,
-        informative: 0,
-        well_written: 0,
-        creative: 0
-    };
-    tags:Array<string>
-    entry:Manga;
-    user:User;
-}
+import { ReviewType } from "../Types";
 
 const RecentsReviews = () => {
-    const [reviews, setReviews] = useState<Review[] | null>(null);
+    const [reviews, setReviews] = useState<ReviewType[] | null>(null);
     const [loadingReviews, setLoadingReviews] = useState(true);
     const [reviewError, setReviewError] = useState(false);
 

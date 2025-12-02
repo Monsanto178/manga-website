@@ -1,15 +1,5 @@
+import { MangaType } from "../../Types";
 import { SearchMangaCard } from "./SearchMangCard";
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status:string;
-    publishing?:boolean;
-    title:string;
-}
 
 type SearchResult = {
     pagination:{
@@ -19,7 +9,7 @@ type SearchResult = {
             total:number;
         }
     }
-    data:Array<Manga>;
+    data:Array<MangaType>;
     query?:string;
 }
 

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { CategoryPagination, FullCardList , CategoryLoading, OrderCard, ErrorMangaCard} from "../Components";
+import { PagedMangaType } from "../Types";
 
 type Type = "manga" | "novel" | "lightnovel" | "oneshot" | "doujin" | "manhwa" | "manhua";
 type Status = 'publishing' | 'complete' | 'discontinued' | 'hiatus' | 'upcoming';
@@ -14,41 +15,6 @@ interface Category {
     order_by: OrderBy | null;
     query:string | null;
 };
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        },
-        webp: {
-            image_url:string;
-            small_image_url:string;
-            large_image_url:string;
-        }
-    }
-    title:string;
-    type:string;
-    chapters:number;
-    status:string;
-    favorites:number;
-    synopsis:string;
-    score:number;
-    genres:[];
-    demographics:[]
-}
-
-type Mangas = {
-    pagination: {
-        last_visible_page:number;
-        has_next_page:boolean;
-        current_page:number;
-        items?: {total:number};
-    }
-    data: Array<Manga>;
-}
 
 type Params = {
     page:string;
@@ -73,7 +39,7 @@ const CategoryMangaPage = (category:Category) => {
 
     const [isLoading, setLoading] = useState(true);
     const [actualPage, setActualPage] = useState(category.page);
-    const [mangas, setMangas] = useState<Mangas | null>(null);
+    const [mangas, setMangas] = useState<PagedMangaType | null>(null);
     const [mangasError, setMangasError] = useState(false);
     const mangasRef = useRef<HTMLElement>(null);
 
@@ -203,7 +169,7 @@ const CategoryMangaPage = (category:Category) => {
 
     return (
         <>
-        <div className={`flex flex-col w-full h-full sm:h-[100dvh]`}>
+        <div className={`flex flex-col w-full ${isLoading ? 'h-full' : ''}`}>
             <section className="my-4 flex flex-col px-[4.2rem] pt-20 gap-y-2">
                 <div className="text-[22px] md:text-[32px] sm:text-[26px] flex flex-row items-center gap-x-[1rem]">
                     <strong>{category.query ? `Search results for: "${category.query}" (${mangas?.pagination.items?.total ? mangas?.pagination.items?.total : 0} results)` :category.name}</strong>
@@ -211,7 +177,14 @@ const CategoryMangaPage = (category:Category) => {
             </section>
 
             <section className="mb-8 mt2 flex flex-col px-[4.2rem] gap-y-2">
-                <OrderCard props={{actualType:type, actualOrder:orderBy, actualStatus:status, actions:{changeOrder, applyFilter}, hasError:mangasError || isLoading}}/>
+                <OrderCard props={
+                    {actualType:type, 
+                    actualOrder:orderBy, 
+                    actualStatus:status, 
+                    actions:{changeOrder, applyFilter}, 
+                    hasError:mangasError || isLoading
+                    }}
+                />
             </section>
 
             <section ref={mangasRef} className={`${mangasError ? 'px-[4.2rem]' : ''}`}>

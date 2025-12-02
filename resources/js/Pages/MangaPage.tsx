@@ -3,93 +3,7 @@ import { MangaBanner, CardList} from '../Components';
 
 import { useEffect, useRef, useState } from 'react';
 import { RelatedCardList } from '../Components/RelatedCard/RelatedCardList';
-
-interface Manga {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string, large_image_url?:string},
-        webp:{image_url:string, small_image_url:string, large_image_url?:string}
-    };
-    status:string;
-    publishing:boolean;
-    published: {
-        prop:{
-            from:{
-                day:number,
-                month:number,
-                year:number
-            },
-            to?:{
-                day:number,
-                month:number,
-                year:number
-            }
-        }
-        string: string;
-    };
-    title:string;
-    synopsis:string;
-    background?:string;
-    titles:Array<{type:string, title:string}>;
-    type:string;
-    authors:
-        Array<{
-            mal_id:number,
-            type:string,
-            name:string
-        }>
-    score: number | null;
-    favorites: number | null;
-    rank: number | null;
-    volumes:number | null;
-    chapters:number | null;
-    genres:[
-        {
-            mal_id:number,
-            type:string,
-            name:string
-        }
-    ];
-    themes:[
-        {
-            mal_id:number,
-            type:string,
-            name:string
-        }
-    ];
-    demographics:
-        Array<{
-            mal_id:number,
-            type:string,
-            name:string
-        }>;
-    serializations:
-        Array<{
-            mal_id:number,
-            type:string,
-            name:string
-        }>;
-    relations:
-        Array<{
-            relation:string,entry:Array<{mal_id:number,type:string,name:string,url:string}>
-        }>
-    external:Array<{name:string,url:string}>
-}
-
-interface Recommendation {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string, small_image_url:string},
-        webp:{image_url:string, small_image_url:string}
-    };
-    status?:string;
-    publishing?:boolean;
-    title:string;
-}
-
-type Recommendations = {
-    data: Array<Recommendation>
-}
+import { AuthorType, CharacterType, FullMangaType, MangaType, ReviewType, RelatedMangaType} from '../Types';
 
 type ParsedManga = {
     mal_id:number;
@@ -102,57 +16,16 @@ type PlainManga = {
     name:string;
 }
 
-interface FullManga {
-    entry: {    
-        mal_id:number;
-        name:string;
-        title?:string;
-        type:string;
-        status:string;
-        images:{
-            jpg:{
-                image_url:string;
-                small_image_url:string;
-                large_image_url:string;
-            }
-            webp:{
-                image_url:string;
-                small_image_url:string;
-                large_image_url:string;
-            }
-        }
-    };
-    relation:string;
-}
 type PlainRel = {
     entry: Array<PlainManga>
     relation: string;
 }
-type Character = {
-    character:{
-        mal_id:number;
-        images:{
-            jpg:{
-                image_url:string;
-            },
-            webp:{
-                image_url:string;
-                small_image_url?:string;
-            }
-        };
-        name:string,
-    };
-    role:string;
 
-}
 type Author = {
     mal_id: number;
     name:string;
 }
-type AuthorFull = Author & {
-    image_url:string;
-    position:string;
-}
+
 type InfoCard = {
     titles: Array<{type:string, title:string}>;
     themes: Array<{mal_id:number, type:string, name:string}>;
@@ -167,40 +40,8 @@ type InfoCard = {
     published: string;
 }
 
-type SimpleManga = {
-    mal_id:number;
-    images:{jpg:{image_url:string}, webp:{image_url:string}};
-    title:string;
-}
-
-type User = {
-    username:string;
-    images:{jpg:{image_url:string}, webp:{image_url:string}}
-    url?: string;
-}
-
-type Review = {
-    mal_id:number;
-    type?:string;
-    date:string;
-    review:string;
-    reactions?:{
-        overall: 0,
-        nice: 0,
-        love_it: 0,
-        funny: 0,
-        confusing: 0,
-        informative: 0,
-        well_written: 0,
-        creative: 0
-    };
-    tags:Array<string>
-    entry:SimpleManga;
-    user:User;
-}
-
 type Reviews = {
-    data: Review[];
+    data: ReviewType[];
     pagination?: {has_next_page:boolean;}
 }
 
@@ -211,25 +52,25 @@ interface firstProp {
 
 
 const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
-    const [manga, setManga] = useState<Manga | null>(null);
+    const [manga, setManga] = useState<FullMangaType | null>(null);
     const [loadingManga, setLoadingManga] = useState(true);
     const [mangaErrors, setMangaErros] = useState(false);
 
-    const [recommendation, setRecommendations] = useState<Recommendations | null>(null);
-    const [halfRecommend, setHalfRecommend] = useState<Recommendation[] | null>(null)
+    const [recommendation, setRecommendations] = useState<MangaType | null>(null);
+    const [halfRecommend, setHalfRecommend] = useState<MangaType[] | null>(null)
     const [loadingRecommend, setLoadingRecommend] = useState(true);
     const [recommendationError, setRecommendError] = useState(false);
 
-    const [related, setRelated] = useState<FullManga[] | null>(null);
+    const [related, setRelated] = useState<RelatedMangaType[] | null>(null);
     const [parsedRel, setParsedRel] = useState<ParsedManga[] | null>(null);
     const [relatedError, setRelatedError] = useState(false);
     const [loadingRel, setLoadingRel] = useState(true);
 
-    const [characters, setCharacters] = useState<Character[] | null>(null);
+    const [characters, setCharacters] = useState<CharacterType[] | null>(null);
     const [charactersError, setCharactersError] = useState(false);
     const [loadingChars, setLoadingChars] = useState(true);
 
-    const [authors, setAuthors] = useState<AuthorFull[] | null>(null);
+    const [authors, setAuthors] = useState<AuthorType[] | null>(null);
     const [authorsError, setAuthorsError] = useState(false);
     const [loadingAuthors, setLoadingAuthors] = useState(true);
 
@@ -317,7 +158,7 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         setInfo(infoCard);
     }
 
-    function mixArray(array : Recommendation[]) {
+    function mixArray(array : MangaType[]) {
         const mixedArr = [...array];
         for (let i = array.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i+1));
@@ -328,6 +169,7 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
 
 
     async function runRelatedFetch() {
+        
         if(!manga) return
         const dataToSend = transformRelations(manga.relations)
         setParsedRel(dataToSend);

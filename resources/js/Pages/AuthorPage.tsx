@@ -1,34 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthorFullCard, AuthorWorkCard, LoadingFullCard} from "../Components";
-
-type Media = {
-    position:string;
-    anime:{
-        mal_id:number;
-        images:{
-            jpg:{image_url:string};
-            webp:{image_url:string};
-        };
-        title:string;
-    }
-}
-
-type Author = {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string}
-    }
-    name:string;
-    given_name?:string;
-    family_name?:string;
-    alternate_names?: Array<string>;
-    birthday:string;
-    favorites:number;
-    about:string;
-    manga:Array<Media>
-    anime:Array<Media>
-}
-
+import { FullAuthorType } from "../Types";
 
 interface Props {
     mal_id: string;
@@ -36,7 +8,7 @@ interface Props {
 
 
 const AuthorPage = ({mal_id}:Props) => {
-    const [author, setAuthor] = useState<Author | null>(null);
+    const [author, setAuthor] = useState<FullAuthorType | null>(null);
     const [authorLoading, setAuthorLoading] = useState(true);
     const [currentSelect, setCurrentSelect] = useState('Manga');
 
@@ -129,7 +101,7 @@ const AuthorPage = ({mal_id}:Props) => {
             <section className="mb-12">
                 <article className="grid justify-center gridCard" style={{gridTemplateColumns:'repeat(auto-fill, 300px)', rowGap:'3rem', columnGap:'1.5rem'}}>
                     {author && currentSelect === 'Manga' && 
-                        (author?.manga.length>0 
+                        ((author.manga && author?.manga.length>0) 
                         ?
                           author.manga.map((el, idx) => {
                             return (
@@ -143,7 +115,7 @@ const AuthorPage = ({mal_id}:Props) => {
                         )
                     }
                     {author && currentSelect === 'Anime' &&
-                        (author?.anime.length > 0 
+                        ((author.anime && author?.anime.length > 0) 
                         ?
                           author.anime.map((el, idx) => {
                             return (

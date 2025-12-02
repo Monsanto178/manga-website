@@ -1,29 +1,23 @@
-type Media = {
-    mal_id:number;
-    images:{
-        jpg:{image_url:string};
-        webp:{image_url:string};
-    };
-    title:string;
-}
+import { FullMediaType, MediaType } from "../../Types";
 
 type Manga = {
     position:string;
-    manga:Media;
+    manga: MediaType;
 }
 
 type Anime = {
     position:string;
-    anime:Media;
+    anime: MediaType;
 }
 
 type Prop  = {
-    data: Manga | Anime;
+    data: FullMediaType;
     type: 'manga' | 'anime';
 }
 
 export const AuthorWorkCard = ({data, type='manga'}:Prop) => {
-    const media = type === 'manga' ? (data as Manga).manga : (data as Anime).anime;
+    // const media = type === 'manga' ? (data as Manga).manga : (data as Anime).anime;
+    const media = data.data;
     return (
         <>
             <a href={`/mangas/manga/${media.mal_id}`} className="flex text-white w-[28%] sm:w-[31%] min-w-[200px] sm:min-w-[300px] max-w-[500px] max-h-[160px] bg-[#363636] overflow-hidden rounded-[15px] transition-transform duration-300 hover:scale-110 overflow-hidden cursor-pointer">
