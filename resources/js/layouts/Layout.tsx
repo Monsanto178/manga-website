@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Header } from "../Components";
+import { Footer, Header } from "../Components";
 import { usePage } from "@inertiajs/react";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
@@ -20,6 +20,7 @@ export default function Layout({children}: LayoutProps) {
         <ErrorBoundary>
             <Header home={isHome}/>
             <main className="bg-[#111111] text-white h-[100%]">{children}</main>
+            <Footer />
         </ ErrorBoundary>
     )
 }

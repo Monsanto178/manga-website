@@ -167,18 +167,27 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         return mixedArr;
     }
 
-
     async function runRelatedFetch() {
         
         if(!manga) return
         const dataToSend = transformRelations(manga.relations)
+        if(dataToSend.length<1) {
+            setRelated(null);
+            setLoadingRel(false);
+            return;
+        }
         setParsedRel(dataToSend);
 
         const enpoint = `/mangas/manga/related`;
         const body = JSON.stringify({data: dataToSend});
         const data = await fetchPostData(enpoint, body)
+
         if (!data.error) {
-            setRelated(data);
+            if(data.length<1) {
+                setRelated(null);
+            } else {
+                setRelated(data);
+            }
         } else {
             setRelatedError(true);
         }
@@ -258,7 +267,11 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
 
         const data = await fetchPostData(endpoint, body);
         if (!data.error) {
-            setReviews(data);
+            if(data.length<1) {
+                setReviews(null);
+            } else {
+                setReviews(data);
+            }
         } else {
             setReviewError(true);
         }
@@ -281,6 +294,7 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
 
     function changeReviewPage(page:number) {
         setReviewPage(page);
+        setLoadingReviews(true);
         scrollTo();
     }
 
@@ -327,16 +341,16 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
     
     return (
         <>
-        <div className='w-full h-full relative pt-10'>
+        <div className='w-full h-full relative pt-10 overflow-hidden'>
             {manga && !mangaErrors && !loadingManga &&
                 <>
                 <section className='overflow-hidden flex flex-nowrap z-2 py-0 px-0 lg:px-[5rem] py-[3rem]'>
                     <MangaBanner manga={manga}></MangaBanner>
                 </section>
                 <section className='absolute inset-0 z-1'>
-                    <div className='z-2 absolute w-full h-full inset-0 bg-gradient-to-b from-[#3c3c3cde] via-[#000000f2] to-[#000000]'></div>
-                    <picture>
-                        <img className='w-full h-full inset-0 absolute object-cover' src={manga.images.jpg.large_image_url} alt="" />
+                    <div className='z-2 absolute w-full h-full inset-0 bg-gradient-to-b from-[#3c3c3cde] via-[#000000f2] to-[#000000] overflow-hidden'></div>
+                    <picture className='max-h-[780px]'>
+                        <img className='w-full h- max-full inset-0 absolute object-cover' src={manga.images.jpg.large_image_url} alt="" />
                     </picture>
                 </section>
                 <section className='relative z-11 pb-[8rem] px-0'>

@@ -26,7 +26,6 @@ const useWindowWidth = () => {
 
 export const MangaCard = ({manga, handleTransitionEnd, isTransitioning, selectedIdx=0}: Props) => {
     const cover = manga.images.webp.image_url;
-    const uri = `mangas/manga/${manga.mal_id}`;
     let status_color = "#4CAF50";
 
     const actualWidth = useWindowWidth();
@@ -69,8 +68,8 @@ export const MangaCard = ({manga, handleTransitionEnd, isTransitioning, selected
             }}
             onTransitionEnd={handleTransitionEnd}
             >
-            <div className="relative flex flex-col object-cover transition-transform duration-300 hover:scale-110 overflow-hidden rounded-md">
-                <a href={uri} className="block">
+            <div className="relative flex flex-col object-cover transition-transform duration-300 hover:scale-107 overflow-hidden rounded-md">
+                <a href={`/mangas/manga/${manga.mal_id}`} className="block">
                     <picture className="h-[80%]">
                         <img src={cover} alt="manga_img" className="w-full h-full aspect-[24/34] " />
                     </picture>

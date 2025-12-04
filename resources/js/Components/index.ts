@@ -28,4 +28,6 @@ export * from "./AuthorCard/AuthorFullCard";
 export * from "./AuthorCard/LoadingFullCard ";
 export * from "./Review/LoadingReviews";
 export * from "./ErrorCard/ErrorMangaCard";
+export * from "./Footer/Footer";
+export * from "./FooterBtn/FooterBtn";
 // export * from "./MangaCard/MangaCard"

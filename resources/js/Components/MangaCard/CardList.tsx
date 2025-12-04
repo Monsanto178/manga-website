@@ -55,16 +55,10 @@ export const CardList = ({manga} : MangaList) => {
         const interval = setInterval(moveSlider, 3000)
         return () => clearInterval(interval);
     }, [manga, isPaused])
-
-    // useEffect(() => {
-    //     if (!isTransitioning) {
-    //         requestAnimationFrame(() => setIsTransitioning(true));
-    //     }
-    // }, [isTransitioning]);
     
     return(
     <>
-    <div className='flex gap-x-6 overflow-x-hidden whitespace-nowrap overflow-y-hidden py-5'
+    <div className='flex pl-2 gap-x-6 overflow-x-hidden whitespace-nowrap overflow-y-hidden py-5'
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
     >
