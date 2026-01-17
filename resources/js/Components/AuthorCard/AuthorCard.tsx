@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LoadingCard } from "./LoadingCard";
-import { AuthorType } from "../../Types";
+import { AuthorType } from "@/Types";
 
 type AuthorProps = {
     entries: AuthorType[];

@@ -2,7 +2,7 @@ import { MangaCard } from "./MangaCard"
 import '../../../css/mangaCard.css'
 import Skeleton from "react-loading-skeleton";
 import { useEffect, useState } from "react";
-import { MangaType } from "../../Types";
+import { MangaType } from "@/Types";
 
 interface MangaList {
     manga: Array<MangaType> | null

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RelatedCard } from "./RelatedCard";
 import { LoadingCard } from "./LoadingCard";
-import { MangaType } from "../../Types";
+import { MangaType } from "@/Types";
 
 type PlainManga = {
     mal_id:number;

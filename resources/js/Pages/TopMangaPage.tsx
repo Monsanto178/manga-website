@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { CategoryPagination, FullCardList , CategoryLoading, OrderCard} from "../Components";
-import { PagedMangaType } from "../Types";
+import { CategoryPagination, FullCardList , CategoryLoading, OrderCard} from "@/Components";
+import { PagedMangaType } from "@/Types";
 
 type Type = "manga" | "novel" | "lightnovel" | "oneshot" | "doujin" | "manhwa" | "manhua";
 type Status = 'publishing' | 'complete' | 'discontinued' | 'hiatus' | 'upcoming';
@@ -96,7 +96,6 @@ const TopMangaPage = (category:Category) => {
     const updateUrl = (page:string) => {
         let baseUrl = window.location.href.split('?')[0];
         baseUrl += `?page=${page}`;
-        console.log('URL ES: ' + baseUrl);
         
         history.pushState(null,'', baseUrl);
     }

@@ -1,4 +1,4 @@
-import { FullMediaType, MediaType } from "../../Types";
+import { FullMediaType, MediaType } from "@/Types";
 
 type Manga = {
     position:string;

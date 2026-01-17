@@ -1,4 +1,4 @@
-import { ChapterType } from "../../Types";
+import { ChapterType } from "@/Types";
 import { ChapterTag } from "./ChapterTag";
 
 interface ChapterList {

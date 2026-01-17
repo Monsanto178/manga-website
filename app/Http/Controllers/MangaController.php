@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response as ClientResponse;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -366,7 +365,6 @@ class MangaController extends Controller
             ]);
         } catch (\Throwable $th) {
             Log::error('Error Trying to Fetch Category', ['Message' => $th->getMessage()]);
-            // return response(['Error' => 'Error Processing Request'], 500);
             return inertia('CategoryMangaPage', [
                 'name' => $genreName, 
                 'mal_id' => $genreId, 

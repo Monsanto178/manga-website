@@ -1,5 +1,5 @@
-import { MangaType } from "../../Types";
-import { TagList } from "../Tag/TagList";
+import { MangaType } from "@/Types";
+import { TagList } from "@/Components";
 
 type Props = {
     data: MangaType;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MangaType } from "../../Types";
+import { MangaType } from "@/Types";
 
 interface Props {
     manga: MangaType;

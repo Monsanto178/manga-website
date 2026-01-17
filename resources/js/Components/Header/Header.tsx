@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react"
-import gatito from '../../assets/images/Gatito.png';
-import { SearchResult } from "../Search/SearchResult";
-import { SearchBar } from "../Search/SearchBar";
-import { MangaType } from "../../Types";
+import gatito from '@/assets/images/Gatito.png';
+import { SearchResult, SearchBar } from "@/Components";
+import { MangaType } from "@/Types";
 
 type SearchResult = {
     pagination:{

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type Props = {
     pagination: {
         last_visible_page:number;

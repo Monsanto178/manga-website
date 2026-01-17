@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { CharacterCard } from "./CharacterCard";
 import { PaginationCard } from "./PaginationCard";
-import { CharacterType } from "../../Types";
+import { CharacterType } from "@/Types";
 
 type CardProps = {
     limitPerPage:number;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { AuthorFullCard, AuthorWorkCard, LoadingFullCard} from "../Components";
-import { FullAuthorType } from "../Types";
+import { AuthorFullCard, AuthorWorkCard, LoadingFullCard} from "@/Components";
+import { FullAuthorType } from "@/Types";
 
 interface Props {
     mal_id: string;
@@ -47,8 +47,6 @@ const AuthorPage = ({mal_id}:Props) => {
 
         setAuthor(data);
         setAuthorLoading(false);
-        console.log(data);
-        
     }
 
     type Selection = 'Manga' | 'Anime';

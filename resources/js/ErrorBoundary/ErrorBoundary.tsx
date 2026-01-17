@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from "react";
-import cat from '../assets/images/cat-500.png';
+import cat from '@/assets/images/cat-500.png';
 
 interface ErrorBoundaryState {
     hasError:boolean;

@@ -1,13 +1,8 @@
-import { CardType } from "../../Types";
+import { CardType } from "@/Types";
 import { GenreCard } from "./GenreCard"
 
-// interface Card {
-//     key:number;
-//     title:string;
-//     cover:string;
-// }
+
 interface List {
-    // cards: Card[];
     cards: CardType[];
 }
 export const GenreCardList = ({cards} : List) => {

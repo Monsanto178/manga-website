@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tag } from "../Components";
+import { Tag } from "@/Components";
 
 type Tag = {
     mal_id:number;

@@ -9,7 +9,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom", "esnext"]
+    "baseUrl": "./resources/js",
+    "lib": ["dom", "esnext"],
+    "paths": {
+      "@/*": ["*"],
+    }
+    
   },
   "include": ["resources/js/**/*", "resources/js/vite-env.d.ts"]
 }

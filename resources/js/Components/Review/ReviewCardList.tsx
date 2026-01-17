@@ -1,4 +1,4 @@
-import { ReviewType } from "../../Types";
+import { ReviewType } from "@/Types";
 import { Pagination } from "./Pagination";
 import { ReviewCard } from "./ReviewCard";
 

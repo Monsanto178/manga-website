@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { TagList } from "../Tag/TagList";
-import { CardType } from "../../Types";
+import { CardType } from "@/Types";
 
 interface Props {
     card: CardType

@@ -1,4 +1,4 @@
-import { TagList } from "../Tag/TagList";
+import { TagList } from "@/Components";
 
 type Title = {type:string; title:string};
 type Tags = {mal_id:number, type:string, name:string};

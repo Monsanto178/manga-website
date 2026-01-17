@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { CategoryPagination, FullCardList , CategoryLoading, OrderCard, ErrorMangaCard} from "../Components";
-import { PagedMangaType } from "../Types";
+import { CategoryPagination, FullCardList , CategoryLoading, OrderCard} from "@/Components";
+import { PagedMangaType } from "@/Types";
 
 type Type = "manga" | "novel" | "lightnovel" | "oneshot" | "doujin" | "manhwa" | "manhua";
 type Status = 'publishing' | 'complete' | 'discontinued' | 'hiatus' | 'upcoming';

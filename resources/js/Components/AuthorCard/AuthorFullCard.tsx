@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FullAuthorType } from "../../Types";
+import { FullAuthorType } from "@/Types";
 
 type Prop = {
     author: FullAuthorType;

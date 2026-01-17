@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Footer, Header } from "../Components";
+import { Footer, Header } from "@/Components";
 import { usePage } from "@inertiajs/react";
-import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
+import ErrorBoundary from "@/ErrorBoundary/ErrorBoundary";
 
 type LayoutProps = {
     children: ReactNode;

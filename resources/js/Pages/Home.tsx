@@ -1,7 +1,7 @@
-import cover_img from '../assets/images/flcl.png';
-import { CardList, ErrorMangaCard, SearchResult } from '../Components';
+import cover_img from '@/assets/images/flcl.png';
+import { CardList, ErrorMangaCard, SearchResult } from '@/Components';
 import { useEffect, useRef, useState } from 'react';
-import { MangaType } from '../Types';
+import { MangaType } from '@/Types';
 
 const Home= (): React.JSX.Element  => {
     const [topMangas, setTopMangas] = useState<MangaType[]>([]);
@@ -103,31 +103,31 @@ const Home= (): React.JSX.Element  => {
             </section>
             
 
-            <section className='flex justify-center  text-[22px] sm:text-[28px] my-4 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mt-0 border-b-1 border-white'>
+            <section className='flex justify-center  text-[20px] sm:text-[24px] my-4 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mt-0 border-b-1 border-white'>
                 <div className='w-full p-2 pb-0 tansition-transform duration-600 bg-[#3C91E6] font-bold'>
                     <a href="/" className='w-full flex justify-center p-2'>
-                        <h2>Home</h2>
+                        <strong>Home</strong>
                     </a>
                 </div>
-                <div className='w-full p-2 pb-0 tansition-transform duration-600 flex hover:bg-[#3C91E6] hover:font-bold '>
+                <div className='w-full p-2 pb-0 tansition-transform duration-600 flex hover:bg-[#3C91E6] font-bold '>
                     <a href="/mangas/manga/random" className='w-full flex justify-center p-2'>
-                        <h2>Random</h2>
+                        <strong>Random</strong>
                     </a>
                 </div>
-                <div className='w-full p-2 pb-0 tansition-transform duration-600 flex hover:bg-[#3C91E6] hover:font-bold '>
+                <div className='w-full p-2 pb-0 tansition-transform duration-600 flex hover:bg-[#3C91E6] font-bold '>
                     <a href="/tags" className='w-full flex justify-center p-2'>
-                        <h2>Tags</h2>
+                        <strong>Tags</strong>
                     </a>
                 </div>
-                <div className='w-full p-2 pb-0 tansition-transform duration-600 flex hover:bg-[#3C91E6] hover:font-bold '>
+                <div className='w-full p-2 pb-0 tansition-transform duration-600 flex hover:bg-[#3C91E6] font-bold '>
                     <a href="/reviews" className='w-full flex justify-center p-2'>
-                        <h2>Reviews</h2>
+                        <strong>Reviews</strong>
                     </a>
                 </div>
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
-                <div className="flex justify-between  text-[26px] sm:text-[32px] mt-4 mx-4">
+                <div className="flex justify-between  text-[18px] sm:text-[22px] mt-4 mx-4">
                     <div>
                         <strong>Top</strong>
                     </div>
@@ -143,7 +143,7 @@ const Home= (): React.JSX.Element  => {
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
-                <div className="flex justify-between  text-[26px] sm:text-[32px] mt-4 mx-4">
+                <div className="flex justify-between  text-[18px] sm:text-[22px] mt-4 mx-4">
                     <div>
                         <strong>Populars</strong>
                     </div>
@@ -159,7 +159,7 @@ const Home= (): React.JSX.Element  => {
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
-                <div className="flex justify-between  text-[26px] sm:text-[32px] mt-4 mx-4">
+                <div className="flex justify-between  text-[18px] sm:text-[22px] mt-4 mx-4">
                     <div>
                         <strong>Recents</strong>
                     </div>
@@ -175,7 +175,7 @@ const Home= (): React.JSX.Element  => {
             </section>
 
             <section className="my-0 mx-2 lg:mx-[4rem] md:mx-[2rem] sm:mx-[1rem] mangaContainer">
-                <div className=" text-[26px] sm:text-[32px] mt-4 mx-4">
+                <div className=" text-[18px] sm:text-[22px] mt-4 mx-4">
                     <strong>Recommendations</strong>
                 </div>
                 {loadingRec && <CardList manga={null}></CardList>}

@@ -1,9 +1,9 @@
-import { StatsCardList, AuthorCard, CharacterList, LoadingBanner, ReviewCardList, ErrorMangaCard} from '../Components';
-import { MangaBanner, CardList} from '../Components';
+import { StatsCardList, AuthorCard, CharacterList, LoadingBanner, ReviewCardList, ErrorMangaCard} from '@/Components';
+import { MangaBanner, CardList} from '@/Components';
 
 import { useEffect, useRef, useState } from 'react';
-import { RelatedCardList } from '../Components/RelatedCard/RelatedCardList';
-import { AuthorType, CharacterType, FullMangaType, MangaType, ReviewType, RelatedMangaType} from '../Types';
+import { RelatedCardList } from '@/Components/RelatedCard/RelatedCardList';
+import { AuthorType, CharacterType, FullMangaType, MangaType, ReviewType, RelatedMangaType} from '@/Types';
 
 type ParsedManga = {
     mal_id:number;
@@ -238,7 +238,6 @@ const MangaPage= ({mangaId} : firstProp): React.JSX.Element  => {
         }
         setLoadingAuthors(false);
     }
-    console.log(recommendationError);
     
 
     async function runRecommendFetch() {

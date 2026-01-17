@@ -1,4 +1,3 @@
-import { TagList } from "../Tag/TagList";
 import { StatsCard } from "./StatsCard";
 
 type Prop = {

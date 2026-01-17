@@ -1,4 +1,4 @@
-import { MangaType } from "../../Types";
+import { MangaType } from "@/Types";
 
 type Props = {
     manga: MangaType;

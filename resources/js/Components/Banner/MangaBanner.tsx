@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { TagList } from "../Tag/TagList";
-import { FullMangaType } from "../../Types/FullMangaType";
+import { FullMangaType } from "@/Types/FullMangaType";
 
 interface MangaContainer {
     manga: FullMangaType;

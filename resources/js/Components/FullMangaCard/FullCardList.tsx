@@ -1,6 +1,5 @@
-import { MangaType, PagedMangaType } from "../../Types";
+import { PagedMangaType } from "@/Types";
 import { FullMangaCard } from "./FullMangaCard"
-import { CategoryPagination } from "./PaginationCard";
 
 export const FullCardList = (props:PagedMangaType) => {
     return (

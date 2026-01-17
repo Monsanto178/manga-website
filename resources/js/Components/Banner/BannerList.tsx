@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Banner } from "./Banner";
-import { CardType } from "../../Types";
+import { CardType } from "@/Types";
 
 
 interface CardList {

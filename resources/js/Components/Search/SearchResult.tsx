@@ -1,4 +1,4 @@
-import { MangaType } from "../../Types";
+import { MangaType } from "@/Types";
 import { SearchMangaCard } from "./SearchMangCard";
 
 type SearchResult = {

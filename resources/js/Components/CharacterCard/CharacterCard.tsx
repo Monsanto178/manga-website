@@ -1,4 +1,4 @@
-import { CharacterType } from "../../Types";
+import { CharacterType } from "@/Types";
 
 export const CharacterCard = ({character, role} : CharacterType) => {
     return (

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { ReviewType } from "../../Types";
+import { useRef, useState } from "react";
+import { ReviewType } from "@/Types";
 
 interface Props {
     review: ReviewType;

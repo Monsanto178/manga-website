@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { LoadingReviews, ReviewCardList } from "../Components";
-import { ReviewType } from "../Types";
+import { LoadingReviews, ReviewCardList } from "@/Components";
+import { ReviewType } from "@/Types";
 
 const RecentsReviews = () => {
     const [reviews, setReviews] = useState<ReviewType[] | null>(null);
