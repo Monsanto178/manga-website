@@ -16,7 +16,7 @@ export const Footer = () => {
             </article>
 
             <article className="flex gap-4">
-                <FooterBtn uri="" title="Visit my Linkedin profile" rounded={true}>
+                <FooterBtn uri="https://www.linkedin.com/in/federico-rosello/" title="Visit my Linkedin profile" rounded={true}>
                     <svg xmlns="http://www.w3.org/2000/svg" 
                         width="24" 
                         height="24" 
@@ -33,7 +33,7 @@ export const Footer = () => {
                     </svg>
                 </FooterBtn>
 
-                <FooterBtn uri="mailto:" title="Contact me with an email" rounded={true}>
+                <FooterBtn uri="mailto:federicogrosell@gmail.com" title="Contact me with an email" rounded={true}>
                     <svg xmlns="http://www.w3.org/2000/svg" 
                         width="24" 
                         height="24" 
